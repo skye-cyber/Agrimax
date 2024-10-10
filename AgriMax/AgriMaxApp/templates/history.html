@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriMax - Cultivating Smarter Farms</title>
+  {% load static %}
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+    <body class="bg-green-50 text-gray-900">
+    <!-- Navigation Bar -->
+    <nav style="position: fixed; top: 0;" class="bg-green-700 w-full text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-3xl font-bold">AgriMax</a>
+        <ul class="flex space-x-4">
+        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
+        <li><a href="{% url 'home' %}#crop-recommendation" class="hover:underline">Crop Recommendation</a></li>
+        <li><a href="{% url 'weather' %}" class="hover:underline">Weather Forecast</a></li>
+        <li><a href="{% url 'home' %}#soil-health" class="hover:underline">Soil Health</a></li>
+        </ul>
+    </div>
+    </nav>
+
+    <!-- Farm History Page -->
+    <section id="farm-history" class="container mx-auto my-32 p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold mb-4 text-green-700">Farm History</h2>
+
+    <!-- History Timeline -->
+    <div class="space-y-6">
+        <!-- Example history entry -->
+        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold text-green-700">July 2024 - Planted Maize</h3>
+        <p class="text-gray-700">Soil Health: Potassium: 40, Phosphorus: 35, Nitrogen: 50, PH: 6.5</p>
+        </div>
+        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold text-green-700">March 2024 - Planted Beans</h3>
+        <p class="text-gray-700">Soil Health: Potassium: 30, Phosphorus: 25, Nitrogen: 45, PH: 6.2</p>
+        </div>
+        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+        <h3 class="text-lg font-bold text-green-700">December 2023 - Planted Wheat</h3>
+        <p class="text-gray-700">Soil Health: Potassium: 50, Phosphorus: 40, Nitrogen: 55, PH: 6.8</p>
+        </div>
+    </div>
+</section>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 text-white p-4 text-center">
+    <p>Contact Us: agrimax@contact.com | +254 700 000 000</p>
+    <p>&copy; 2024 AgriMax. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

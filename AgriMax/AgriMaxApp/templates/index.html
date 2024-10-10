@@ -1,0 +1,253 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriMax - Cultivating Smarter Farms</title>
+  {% load static %}
+
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="{% static 'js/typewriter.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/helper.js' %}" defer></script>
+  <script type="text/javascript" src="{% static 'js/script.js' %}" defer></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-green-50 text-gray-900">
+
+  <!-- Navigation Bar -->
+<nav style="position: fixed;" class="bg-green-700 w-full text-white overfl-x-wrap p-2 shadow-lg">
+  <div style="height: 70%;" class="container mx-2">
+  <div class="flex">
+    <a href="#" class="text--3xl font-bold">AgriMax</a>
+    <p style="color: lightgreen; position: fixed; top: 0; right: 5px" class="bg-green text-sm"><b>Welcome</b> <i> {{ user }}</i></p>
+  </div>
+    <ul class="flex space-x-4 justify-flex-end mt-2 overflow-x-wrap">
+      <li><a href="#crop-recommendation" class="hover:text-yellow-400">Recommendation</a></li>
+      <li><a href="{% url 'history' %}" class="hover:text-yellow-400">History</a></li>
+      <li><a href="#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
+      <li><a href="{% url 'weather' %}" class="hover:text-yellow-400">Weather</a></li>
+      <li><a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a></li>
+    </ul>
+  </div>
+
+</nav>
+  <!-- Hero Section -->
+  <section class="text-center bg-cover bg-center h-screen overflow-x-hidden flex items-center justify-center" style="background-image: url('https://enzostvs-cached-generation.hf.space/generate/farm-landscape-16_9.jpg?format=landscape-16_9')">
+    <div class="bg-green-800 bg-opacity-50 p-10 rounded-md mx-1">
+      <h1 class="text-5xl font-bold text-white" id="intro1"></h1>
+      <p class="text-lg text-white mt-4" id="intro2"></p>
+      <a href="#crop-recommendation" class="mt-6 inline-block bg-yellow-500 text-green-900 px-8 py-3 rounded-lg shadow-md hover:bg-yellow-600">Get Started</a>
+    </div>
+  </section>
+
+  <!-- Crop Recommendation Form -->
+  <section id="crop-recommendation" class="container mx-auto overflow-x-hidden my-10 p-6 bg-white rounded-lg shadow-md">
+    <h2 class="text-3xl font-bold mb-4 text-green-700">Crop Recommendation</h2>
+    <form class="space-y-4 form" id="rec_" method="POST" action="{% url 'recommend' %}">
+      {% csrf_token %}
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label for="_N" class="block text-sm font-medium text-gray-700">Filter recommendations</label>
+            <input type="number" max="10" min="1" value="1" id="_N" name="_N" class="mt-1 p-2 w-full border border-gray-300 rounded-md">
+              <!--<option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>-->
+        </div>
+        <div>
+          <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+          <select type="text" id="model" name="model" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True onchange="model_helper()">
+            <option value="all" selected>All</option>
+            <option value="model_DC_63lg">model_DC_63lg</option>
+            <option value="model_RFC_63">model_RFC_63</option>
+            <option value="model_DC_63sm">model_DC_63sm</option>
+          </select>
+
+            <p class="text-sm text-green-700 insight" id="insight"></p>
+        </div>
+
+        <div>
+          <label for="potassium" class="block text-sm font-medium text-gray-700">Potassium Level</label>
+          <input type="text" id="potassium" name="potassium" step="any" placeholder="Potassium (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+        <p class="text-sm text-red"><i id="k"></i></p>
+      </div>
+        <div>
+          <label for="phosphorus" class="block text-sm font-medium text-gray-700">Phosphorus Level</label>
+          <input type="text" id="phosphorus" name="phosphorus" step="any" placeholder="Phosphorus (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red insight"><i id="p"></i></p>
+        </div>
+        <div>
+          <label for="nitrogen" class="block text-sm font-medium text-gray-700">Nitrogen Level</label>
+          <input type="text" id="nitrogen" name="nitrogen" step="any" placeholder="Nitrogen (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red"><i id="n"></i></p>
+        </div>
+        <div>
+          <label for="ph" class="block text-sm font-medium text-gray-700">PH Level</label>
+          <input type="text" id="ph" name="ph" step="any" placeholder="Enter you ph levels here e.g 6.561" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red"><i id="_ph"></i></p>
+        </div>
+        <div>
+          <label for="temperature" class="block text-sm font-medium text-gray-700">Temperature</label>
+          <input type="text" id="temperature" name="temperature" step="any" placeholder="Temperature (&deg;C)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red"><i id="_temp"></i></p>
+        </div>
+        <div>
+          <label for="rainfall" class="block text-sm font-medium text-gray-700">Rainfall</label>
+          <input type="text" id="rainfall" step="any" placeholder="Rainfall (mm)" name="rainfall" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red"><i id="_rain"></i></p>
+        </div>
+        <div>
+          <label for="humidity" class="block text-sm font-medium text-gray-700">Humidity</label>
+          <input type="text" id="humidity" name="humidity" step="any" placeholder="Humidity (%)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+          <p class="text-sm text-red"><i id="_hum"></i></p>
+        </div>
+      </div>
+      <button type="submit" id="rec_" class="mt-4 bg-green-700 text-white ml--50 px-4 py-2 rounded-lg shadow-md hover:bg-green-800" onclick="const form = document.getElementById('rec_');
+form.addEventListener('submit', validateForm);
+">Submit</button>
+    </form>
+        <section class="container mx-auto my-2 p-2 bg-white rounded-lg shadow-md" id="crop_rec">
+        <h1 class="_h1">Crop Recommendations</h1>
+        <h2 class=""><b>Recommendations&nbsp;&nbsp;Score</b></h2>
+        {% if crop_rec %}
+            {% for crop, metrics in crop_rec.items %}
+                <div class="crop">
+
+                    <p>{{crop|capfirst}} : <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>{{metrics|get_percent|floatformat:2}}%</p><!-- also == {{metrics|get_percent|get_dp}}%-->
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </section>
+  </section>
+
+  <!-- Soil Health Evaluation Page -->
+<section id="soil-health" class="container mx-auto overflow-x-hidden my-10 p-6 bg-white rounded-lg shadow-md">
+  <h2 class="text-3xl font-bold mb-4 text-green-700">Soil Health Evaluation</h2>
+  <form class="space-y-4 form" id="health_" method="POST" action="{% url 'health' %}">
+    {% csrf_token %}
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label for="desired-crop" class="block text-sm font-medium text-gray-700">Desired Crop</label>
+          <select id="desired-crop" name="desired_crop" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+            <option value="" disabled selected>Select a crop</option>
+            <option value="all">All</option>
+            <option value="wheat">Wheat</option>
+            <option value="corn">Corn/Maize</option>
+            <option value="rice">Rice</option>
+            <option value="soybeans">Soybeans</option>
+            <option value="sugarcane"> Sugarcane</option>
+            <option value="barley">Barley</option>
+            <option value="potato">Potato</option>
+            <option value="coffee">Coffee</option>
+            <option value="tea">Tea</option>
+            <option value="peas">Peas</option>
+            <option value="cotton">Cotton</option>
+            <option value="tomato">Tomato</option>
+            <option value="onion">Onion</option>
+            <option value="banana">Banana</option>
+            <option value="pepper">Pepper</option>
+            <option value="cassava"> Cassava</option>
+            <option value="spinach">Spinach</option>
+            <option value="kale">Kale</option>
+            <option value="millet">Millet</option>
+            <option value="sorghum">Sorghum</option>
+            <option value="greengram">Greengram</option>
+            <option value="cowpea">Cowpea</option>
+            <option value="sunflower">Sunflower</option>
+            <option value="yam">Yam</option>
+            <option value="oats">Oats</option>
+            <option value="garlic">Garlic </option>
+            <option value="lettuce">Lettuce </option>
+            <option value="cucumber">Cucumber</option>
+            <option value="chickpea">Chickpea</option>
+            <option value="blackgram">Blackgram</option>
+            <option value="pomegranate">Pomegranate</option>
+            <option value="grapes">Grapes</option>
+            <option value="watermelon">Watermelon</option>
+            <option value="apple">Apple</option>
+            <option value="orange">Orange</option>
+            <option value="lemon">Lemon</option>
+            <option value="mango">Mango</option>
+            <option value="pawpaw">Pawpaw</option>
+            <option value="coconut">Coconut</option>
+            <option value="pigeonpeas">Pigeonpeas</option>
+        </select>
+      </div>
+      <div>
+        <label for="potassium" class="block mt-2 text-sm font-medium text-gray-700">Potassium Level</label>
+        <input type="text" id="potassium" name="potassium" step="any" placeholder="Potassium (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+        <p class="text-sm text-red"><i id="k"></i></p>
+      </div>
+      <div class="mt-2">
+        <label for="phosphorus" class="block text-sm font-medium text-gray-700">Phosphorus Level</label>
+        <input type="text" id="phosphorus" name="phosphorus" step="any" placeholder="Phosphorus (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+        <p class="text-sm text-red"><i id="p"></i></p>
+      </div>
+      <div>
+        <label for="nitrogen" class="block text-sm font-medium text-gray-700">Nitrogen Level</label>
+        <input type="text" id="nitrogen" name="nitrogen" step="any" placeholder="Nitrogen (kg/ha)" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+        <p class="text-sm text-red"><i id="n"></i></p>
+      </div>
+      <div>
+        <label for="ph" class="block text-sm font-medium text-gray-700">PH Level</label>
+        <input type="text" id="ph" name="ph" step="any" placeholder="ph value" class="mt-1 p-2 w-full border border-gray-300 rounded-md" required=True>
+        <p class="text-sm text-red"><i id="_ph"></i></p>
+      </div>
+    </div>
+    <button type="submit" id="health_" class="mt-4 ml--50 bg-green-700 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-800" onclick="const form = document.getElementById('health_');
+form.addEventListener('submit', validateForm);">Evaluate</button>
+  </form>
+  <!-- Placeholder for results -->
+
+  <div id="soil-health-results" class="mt-6 p-4 bg-gray-100 rounded-lg">
+  <div id="soil-health-results" class="mt-6 p-4 bg-gray-100 rounded-lg">
+    <section class="container mx-auto my-2 p-2 bg-white rounded-lg shadow-md" id="recommendations">
+        <h1 class="_h1">Soil Health Evaluation</h1>
+        {% if recommendations %}
+            {% for crop, metrics in recommendations.items %}
+                <div class="crop">
+                    <h2 class=""><b>{{ crop|capfirst }}</b></h2>
+                    {% for nutrient, score in metrics.items %}
+                        {% if nutrient != 'Comments' %}
+                            {% if score == 100 %}
+                                <p class="nutrient good">
+                            {% elif 70 >= score > 100 %}
+                                <p class="nutrient okay">
+                            {% else %}
+                                <p class="nutrient low">
+                            {% endif %}
+                                {{ nutrient }}: {{ score|floatformat:2 }}% -
+                                <span class="comment">{{ metrics.Comments|get_item:nutrient }}</span>
+                            </p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No recommendations available.</p>
+        {% endif %}
+    </section>
+</div>
+
+  </div>
+</section>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 text-white p-4 text-center">
+    <a href="{% url 'logout' %}" class="hover:underline">Logout</a>
+    <p id="contact">Contact Us: agrimax@contact.com | +254 700 000 000</p>
+    <p>&copy; 2024 AgriMax. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

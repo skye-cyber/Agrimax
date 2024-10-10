@@ -1,0 +1,27 @@
+Create an intuitive web interface with classic UI interface for:
+Crop Recommendationand field management system, where customers can get crop recomendations from models which will later be intengrated, help farmers keep their farm history and manage their soil ealth, keeps track with emerging trend in the agricultural field, be sure to choose the best name for the website
+Should have an intuitive login page reflecting high expectation on the purpose of the website.
+Should have Navigation bar to help navigate to different pages
+Should allow for smooth scrolling.
+Should have farming intuitive and colorful appearance evoking and thriving agricultural aura.
+The color choice and icons should be carefully chosen to align with the website goal.
+The website should reflect high proficiency in web technologies
+It should be able to allow intengration with weather forcasting data.
+Should have page where farmers enter this data:
+    1.Potassium level
+    2.Phosphorus level
+    3.Nitrogen level
+    4.PH level
+    5.Temperature
+    6.Rainfal
+    7.Humidity
+    and also have a place to display results of processed data.
+Should have a page to display farm history such as crops previously planted, Soil history whhich shoul show soil health over time.
+Should have a sectionor page to evaluate soil health by accepting this data:
+    1.Desired crop
+    2.Potassium level
+    3.Phosphorus level
+    4.Nitrogen level
+    5.PH level
+The website should allow for appearance choosing.
+The footer should contain contact details

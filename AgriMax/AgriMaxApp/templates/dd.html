@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agricultural Weather Forecast</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for a more agricultural feel */
+        .weather-card {
+            background-image: url('https://example.com/farm-background.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-green-50 font-serif">
+
+    <!-- Navbar -->
+    <nav class="bg-green-800 text-white p-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Farm Weather Forecast</h1>
+            <ul class="flex space-x-4">
+                <li><a href="#" class="hover:text-yellow-300">Home</a></li>
+                <li><a href="#" class="hover:text-yellow-300">Forecast</a></li>
+                <li><a href="#" class="hover:text-yellow-300">Tips</a></li>
+                <li><a href="#" class="hover:text-yellow-300">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto p-8">
+
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-green-900">Realistic Weather Forecast for Your Farm</h2>
+            <p class="text-lg text-green-700">Monitor weather conditions to plan your agricultural activities effectively.</p>
+        </div>
+
+        <!-- Weather Forecast Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Day 1 Weather Card -->
+            <div class="weather-card p-6 shadow-lg rounded-lg bg-white backdrop-blur-md bg-opacity-70">
+                <h3 class="text-xl font-semibold text-green-900">Monday, Sep 30</h3>
+                <div class="flex items-center mt-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Sunny" class="w-16 h-16">
+                    <div class="ml-4">
+                        <p class="text-lg font-semibold text-yellow-600">Sunny</p>
+                        <p class="text-sm text-gray-700">Temperature: 29°C / 15°C</p>
+                        <p class="text-sm text-gray-700">Humidity: 60%</p>
+                        <p class="text-sm text-gray-700">Wind: 5km/h NW</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 2 Weather Card -->
+            <div class="weather-card p-6 shadow-lg rounded-lg bg-white backdrop-blur-md bg-opacity-70">
+                <h3 class="text-xl font-semibold text-green-900">Tuesday, Oct 1</h3>
+                <div class="flex items-center mt-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1163/1163657.png" alt="Cloudy" class="w-16 h-16">
+                    <div class="ml-4">
+                        <p class="text-lg font-semibold text-gray-600">Cloudy</p>
+                        <p class="text-sm text-gray-700">Temperature: 24°C / 14°C</p>
+                        <p class="text-sm text-gray-700">Humidity: 75%</p>
+                        <p class="text-sm text-gray-700">Wind: 10km/h W</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Day 3 Weather Card -->
+            <div class="weather-card p-6 shadow-lg rounded-lg bg-white backdrop-blur-md bg-opacity-70">
+                <h3 class="text-xl font-semibold text-green-900">Wednesday, Oct 2</h3>
+                <div class="flex items-center mt-4">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1163/1163622.png" alt="Rainy" class="w-16 h-16">
+                    <div class="ml-4">
+                        <p class="text-lg font-semibold text-blue-600">Rainy</p>
+                        <p class="text-sm text-gray-700">Temperature: 22°C / 12°C</p>
+                        <p class="text-sm text-gray-700">Humidity: 90%</p>
+                        <p class="text-sm text-gray-700">Wind: 15km/h SW</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-green-800 text-white p-4 mt-12">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 Farm Weather Forecast | Designed for Farmers by Farmers</p>
+        </div>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+{
+    "coord": {
+        "lon": 37.3028,
+        "lat": -0.4689
+    },
+    "weather": [
+        {
+            "id": 501,
+            "main": "Rain",
+            "description": "moderate rain",
+            "icon": "10d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 295.96,
+        "feels_like": 295.81,
+        "temp_min": 295.96,
+        "temp_max": 295.96,
+        "pressure": 1010,
+        "humidity": 58,
+        "sea_level": 1010,
+        "grnd_level": 842
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 2.52,
+        "deg": 334,
+        "gust": 3.65
+    },
+    "rain": {
+        "1h": 1.33
+    },
+    "clouds": {
+        "all": 83
+    },
+    "dt": 1727532315,
+    "sys": {
+        "country": "KE",
+        "sunrise": 1727493476,
+        "sunset": 1727537083
+    },
+    "timezone": 10800,
+    "id": 192859,
+    "name": "Kerugoya",
+    "cod": 200
+}
