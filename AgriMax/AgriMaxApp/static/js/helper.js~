@@ -1,5 +1,5 @@
 indexi = 0
-texti = `I recommendation using the default selection [All] for higher accuracy`
+texti =
 
 
 async function model_helper() {
@@ -17,7 +17,7 @@ async function model_helper() {
             const currentText = document.getElementById("insight").innerHTML;
             document.getElementById("insight").innerHTML = currentText.slice(0, -1);
             indexi--; // Decrement the index
-            setTimeout(model_helper, 20); //    typing speed (milliseconds)
+            setTimeout(model_helper, 20); //typing speed (milliseconds)
 
         }
     }

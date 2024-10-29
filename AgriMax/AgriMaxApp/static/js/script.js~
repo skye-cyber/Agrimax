@@ -1,7 +1,24 @@
 //Cretae function for validating forms
-function Validator(){
-    const fields
+function validateForm(event) {
+    const form = event.target; // Get the form being submitted
+    const fields = form.querySelectorAll('input[type="text"], input[type="number"]'); // Adjust selector based on your form structure
+    let isValid = true;
+
+    fields.forEach(field => {
+        const value = field.value;
+        if (!isValidNumber(value) && value !== '') {
+            isValid = false; // Mark as invalid
+            alert(`${field.name} field accepts (numbers, decimal) only.`); // Show alert for invalid field
+            field.focus(); // Optional: Set focus back to the invalid field
+            return; // Stop checking after finding the first invalid field
+        }
+    });
+
+    if (!isValid) {
+        event.preventDefault(); // Prevent form submission if any field is invalid
+    }
 }
+
 // Map a field to its message_field
 const message_fields_map = {
     "potassium": "k",
@@ -138,3 +155,32 @@ function isValidNumber(value) {
 
 // Initialize event listeners when the document is loaded
 document.addEventListener('DOMContentLoaded', InputEventListener);
+
+//......................................
+document.addEventListener('DOMContentLoaded', function() {
+    // Track menu visibility
+    let isDisplayed = false;
+    const button = document.getElementById('dropdown-button');
+    const dropdownMenu = document.getElementById('dropdown-menu');
+
+    // Add click event listener to the button
+    button.addEventListener('click', function(event) {
+        event.stopPropagation(); // Prevents the document click listener from immediately hiding the menu
+        toggleDropdown();
+    });
+
+    // Toggle dropdown menu visibility
+    function toggleDropdown() {
+        isDisplayed = !isDisplayed;
+        dropdownMenu.classList.toggle('hidden', !isDisplayed);
+    }
+
+    // Close dropdown if clicking outside the menu
+    document.addEventListener('click', function(event) {
+        if (!button.contains(event.target) && !dropdownMenu.contains(event.target)) {
+            dropdownMenu.classList.add('hidden');
+            isDisplayed = false;
+        }
+    });
+});
+

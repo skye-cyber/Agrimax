@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -152,7 +155,7 @@ html,
   -moz-tab-size: 4;
   /* 3 */
   -o-tab-size: 4;
-     tab-size: 4;
+  tab-size: 4;
   /* 3 */
   font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   /* 4 */
@@ -197,7 +200,7 @@ Add the correct text decoration in Chrome, Edge, and Safari.
 
 abbr:where([title]) {
   -webkit-text-decoration: underline dotted;
-          text-decoration: underline dotted;
+  text-decoration: underline dotted;
 }
 
 /*
@@ -558,6 +561,7 @@ video {
   width: 100%;
 }
 
+
 @media (min-width: 640px) {
   .container {
     max-width: 640px;
@@ -613,14 +617,18 @@ video {
   height: 100vh;
 }
 
+.h-16-screen{
+  height: 70vh;
+}
+
 .w-full {
   width: 100%;
 }
 
 .appearance-none {
   -webkit-appearance: none;
-     -moz-appearance: none;
-          appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 .items-center {
@@ -719,7 +727,7 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-.t-red{
+.text-red{
   color:red;
   background-color:blue;
 }

@@ -7,7 +7,6 @@
  // Index to track the current character being typed
 var index = 0;
 var index2 = 0;
-var indexi = 0
 
 //Function to simulate typing effect
 async function typeWriterhead() {

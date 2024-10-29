@@ -1,5 +1,5 @@
 indexi = 0
-texti = `I recommendation using the default selection [All] for higher accuracy`
+texti = `I recommend using the default selection [All] for higher accuracy`
 
 
 async function model_helper() {
