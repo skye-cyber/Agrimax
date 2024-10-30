@@ -5,44 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AgriMax</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loginmain.css' %}">
     <!--<link rel="stylesheet" href="{% static 'css/styles.css' %}">-->
 </head>
     <body class="bg-gray-100 h-screen">
     <!-- Background Image -->
-    <div class="bg-cover bg-center h-screen" style="background-image: url('{% static 'images/1598235-1613820350.jpg' %}'); background-size: cover;">
+    <div class="bg-cover flex items-center justify-center min-h-screen" style="background-image: url('{% static 'images/1598235-1613820350.jpg' %}'); background-size: cover;">
         <!-- Login Form -->
-        <div class="flex justify-center items-center h-screen mx-auto p-4 md:p-6 lg:p-12 xl:p-24">
-        <div class="bg-white rounded-lg mx-auto shadow-md sm:p-6 md:p-8 lg:p-12 xl:p-16" style="background-image: url('{% static 'images/th-3479564554' %}');">
+        <div class="bg-cyan-500 w-fit h-fit items-center rounded-md justify-center p-8 shadow-lg">
             <h2 class="text-2xl font-bold">Log In</h2>
 
-            <form method="POST" action="{% url 'userlogin' %}">
-            {% csrf_token %}
-            <div class="mb-4 py-2">
-                <label for="username" class="block text-gray-700 text-sm font-bold mb-2" required>Username</label>
-                <input type="text" id="username" name="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-            </div>
+            <form method="POST" class="block" action="{% url 'userlogin' %}">
+                {% csrf_token %}
+                <div class="mb-4 py-2">
+                    <label for="username" class="block text-gray-700 text-sm font-bold mb-2" required>Username</label>
+                    <input type="text" id="username" name="username" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
 
-            <div class="mb-4 py-2">
-                <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
-            </div>
+                <div class="mb-4 py-2">
+                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="password" name="password" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
 
-            {% if messages %}
-            {% for message in messages %}
-            <p style="color: red;" class="text-sm">{{message}}</p>
-            {% endfor %}
-            {% endif %}
+                {% if messages %}
+                {% for message in messages %}
+                <p style="color: red;" class="text-sm">{{ message }}</p>
+                {% endfor %}
+                {% endif %}
 
-            <div class="flex items-center justify-between">
-                <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" type="submit">Log In</button>
-                <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Forgot Password?</a>
-            </div>
-
+                <div class="flex items-center justify-between">
+                    <button class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded" type="submit">Log In</button>
+                    <a href="#" class="text-sm text-gray-600 hover:text-gray-900">Forgot Password?</a>
+                </div>
             </form>
+
             <p class="text-sm text-gray-600">Don't have an account? <a href="{% url 'getsignup' %}" class="text-orange-500 hover:text-orange-700">Sign Up</a></p>
         </div>
-        </div>
+
     </div>
     </body>
 </html>

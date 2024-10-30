@@ -256,7 +256,6 @@ def recommend(request):
             request.session['crop_rec'] = crop_rec
             return redirect(f"{reverse('home_crop_rec')}#crop_rec")
         else:
-            print(form.errors)
             return render(request, 'index.html', {'form': form})
             # return HttpResponse('<b>Invalid form</b>')
     else:

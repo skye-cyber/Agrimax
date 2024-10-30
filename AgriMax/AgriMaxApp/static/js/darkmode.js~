@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
             sunIcon.classList.remove("hidden");
             moonIcon.classList.add("hidden");
             //insight_section.classList.add("bg-light-img");
-            //insight_section.classList.remove("bg-dark-img");
+            insight_section.classList.remove("bg-dark-img");
         }
         localStorage.setItem("theme", theme);
     }

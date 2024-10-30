@@ -3,14 +3,14 @@ import numpy as np
 import pandas as pd
 
 # Load the model with mmap_mode='r' (read-only)
-model_DC_63sm = joblib.load(
-    '/home/skye/skye@fieldmanagement/vet@models/DecisionTree063.05.pkl', mmap_mode='r')
+model_DC_65 = joblib.load(
+    '../AgriMax/vet@models/DecisionTree65.35.pkl', mmap_mode='r')
 
 model_RFC_63 = joblib.load(
-    '/home/skye/skye@fieldmanagement/vet@models/RFClassifier063.74.pkl', mmap_mode='r')
+    '../AgriMax/vet@models/RFClassifier063.74.pkl', mmap_mode='r')
 
-model_DC_63lg = joblib.load(
-    '/home/skye/skye@fieldmanagement/vet@models/DecisionTree.pkl', mmap_mode='r')
+model_DC_63 = joblib.load(
+    '../AgriMax/vet@models/DecisionTree63.pkl', mmap_mode='r')
 
 
 def predict_crop(model, N, P, K, temperature, humidity, ph, rainfall, n=10):
@@ -48,15 +48,15 @@ def controller(n, p, k, t, h, ph, r, _N: int = 3, model=None):
     if model:
         model_dict = {
             "model_RFC_63": model_RFC_63,
-            "model_DC_63sm": model_DC_63sm,
-            "model_DC_63lg": model_DC_63lg
+            "model_DC_65": model_DC_65,
+            "model_DC_63": model_DC_63
         }
         model = model_dict.get(model)
         res = predict_crop(model,  n, p, k, t, h, ph, r)
         result = dict(res)
 
     else:
-        models = [model_DC_63sm, model_RFC_63, model_DC_63lg]
+        models = [model_DC_65, model_RFC_63, model_DC_63]
         for model in models:
             # for n, p, k, t, h, ph, r in zip(N, P, K, T, H, PH, R):
             res = predict_crop(model,  n, p, k, t, h, ph, r)

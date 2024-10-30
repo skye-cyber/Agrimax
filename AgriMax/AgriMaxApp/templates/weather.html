@@ -6,86 +6,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Weather Forecast</title>
     {% load static %}
-  <link href="{% static 'css/weather.css' %}" rel="stylesheet" >
-  <script src="https://cdn.tailcss.com"></script>
-  <style>
-    /* Body background and typography */
-    body {
-      background-color: #f7fafc;
-      font-family: 'Inter', sans-serif;
-    }
-
-    /* Floating weather alert */
-    #weatherAlert {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 50;
-      border: 2px solid #f6e05e;
-    }
-
-    /* Icons for weather */
-    .weather-icon {
-      width: 40px;
-      height: 40px;
-    }
-
-    /* Alert fade-in animation */
-    .fade-in {
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-    .fade-in.visible {
-      opacity: 1;
-    }
-    ._card {
-        transition: transform 0.3s ease; /* Smooth transition */
-    }
-
-    ._card:hover {
-        transform: scale(1.03); /* Increase size by 2% */
-    }
-    .overflow-x-hidden{
-      overflow-x:hidden;
-    }
-    .z-index-100{
-      z-index:100;
-      }
-    .btn {
-        cursor: pointer;
-    }
-
-    .active {
-        background-color: blue;
-        color: white;
-  }
-  </style>
+  <link href="{% static 'css/weathermain.css' %}" rel="stylesheet" >
+  <script src="{% static 'js/darkmode.js' %}"></script>
+  <!--<script src="https://cdn.tailcss.com"></script>-->
 </head>
-<body class="bg-green-50 font-serif">
+<body class="bg-green-50 font-serif dark:bg-slate-600">
 
   <!-- Navigation Menu -->
-  <nav class="bg-green-800 p-3 md:p-4 lg:p-4 overflow-x-hidden fixed top-0 w-full z-index-100">
-    <ul class="flex justify-around text-white font-semibold">
+  <nav class="bg-green-700 p-4 overflow-x-hidden fixed top-0 w-full z-50 dark:bg-slate-900 dark:border-b-2 dark:border-gray-100">
+    <ul class="flex justify-around mr-10 space-x-1 lg:space-x-2 xl:space-x-2 items-right lg:justify-end xl:justify-end  text-white font-semibold">
       <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
-      <!--<li><a href="{% url 'home' %}#crop-recommendation" class="hover:text-yellow-400">Crop Recommendation</a></li>-->
       <li><a href="{% url 'home' %}#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
       <li><a href="{% url 'history' %}" class="hover:text-yellow-400">Farm History</a></li>
       <li><a href="{% url 'home' %}#contact" class="hover:text-yellow-400">Contact</a></li>
     </ul>
+    <div class="fixed top-2 right-0 p-2 z-50">
+          <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400">
+                  <svg id="sun-icon" width="30" height="30" class="w-5 h-5" fill="currentColor" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="15" cy="15" r="6" fill="currentColor" />
+                      <line x1="15" y1="1" x2="15" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="15" y1="26" x2="15" y2="29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="1" y1="15" x2="4" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="26" y1="15" x2="29" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="5.5" y1="5.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="21.5" y1="21.5" x2="24.5" y2="24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="5.5" y1="24.5" x2="8.5" y2="21.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="21.5" y1="8.5" x2="24.5" y2="5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                  <svg id="moon-icon" width="30" height="30" viewBox="0 0 24 24" class="w-5 h-5 hidden" aria-hidden="true">
+                      <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10 8.13 8.13 0 0 1-10-10z"/>
+                  </svg>
+            </button>
+    </div>
   </nav>
 
   <!-- Floating Weather Alert -->
-  <div id="weatherAlert" class="hidden fade-in bg-yellow-100 text-yellow-800 mt-8 p-4 rounded-lg shadow-lg">
+  <div id="weatherAlert" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out visible opacity-1 bg-yellow-100 text-yellow-800 mt-8 p-4 rounded-lg shadow-lg">
     <p><strong>Alert:</strong> A significant drop in temperature is expected tomorrow. Protect young crops!</p>
   </div>
 
   <!-- Weather Page Container -->
-  <div class="container mx-auto py-8 px-6 bg-white shadow-lg rounded-lg mt-8">
+  <div class="container mx-auto px-4 py-4 mb-8 mt-16 bg-white shadow-lg rounded-lg dark:bg-slate-800">
     <!-- Page Title -->
-    <h1 class="text-2xl md:text-3xl lg:text-4xl font-extrabold text-green-700 text-center mb-8">Agricultural Weather Forecast</h1>
+    <h1 class="text-2xl p-auto my-2 md:text-3xl lg:text-4xl xl:text-4xl font-extrabold text-green-700 text-center">Weather Forecast</h1>
 
     <!-- Forecast and Weather Conditions -->
-    <div id="button-container" class="flex Wtype justify-center mb-8 overflow-x-hidden">
+    <div id="button-container" class="flex justify-center mb-4 overflow-x-hidden">
       <button id="dailyToggle" class="btn   px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold rounded-l-lg hover:bg-green-500 transition">Daily</button>
       <button id="hourlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition">Hourly</button>
       <button id="monthlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition">Monthly</button>
@@ -93,13 +59,13 @@
     </div>
 
   <!--.....................................Daily Forecast 7 Days............................................-->
-    <div id="dailyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-4 gap-2">
+    <div id="dailyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
     <div class="grid gap-6 ml-2">
       <!-- Sample Day Forecast -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">Monday</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163660.png" alt="Sunny" class="w-16 h-16">
+          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
@@ -108,10 +74,10 @@
       </div>
 
       <!-- Additional Forecast Cards -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">Tuesday</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" class="w-16 h-16">
+          <img src="{% static 'images/cloudy.png' %}" alt="Cloudy" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-gray-600 font-semibold">Cloudy</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">26°C / 18°C</span></p>
@@ -121,10 +87,10 @@
     </div>
 
     <div class="grid gap-6 ml-2">
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">Wednesday</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163660.png" alt="Sunny" class="w-16 h-16">
+          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
@@ -133,10 +99,10 @@
       </div>
 
       <!-- Additional Forecast Cards -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">Thursday</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163624.png" alt="Cloudy" class="w-16 h-16">
+          <img src="{% static 'images/cloudy.png' %}" alt="Cloudy" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-gray-600 font-semibold">Cloudy</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">26°C / 18°C</span></p>
@@ -146,10 +112,10 @@
     </div>
 
     <div class="grid gap-6 mt-2 ml-2">
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">Friday</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163660.png" alt="Sunny" class="w-16 h-16">
+          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
@@ -160,35 +126,35 @@
     </div>
 
    <!--............................Hourly Forecast Section (Initially Hidden)...................................-->
-    <div id="hourlyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+    <div id="hourlyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden p-4 rounded-lg dark:bg-gray-900">
       <!-- Daily 3 HOURS Forecast Section -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
 
           <h2 class="text-xl font-bold mb-2 text-green-700">For 3 HRS</h2>
           <h2 class="text-gray-600">Country: <span class="text-green-700">{{ country|default:"Value not found" }}</span></h2>
-          <img src="https://cdn-icons-png.flaticon.com/512/{{icon}}.png" class="w-16 h-16" alt="Weather Icon">
-          <h2 class="text-gray-600">Location: <span class="text-blue-600">{{ location }}°C</span></h2>
+          <img src="{% static 'images/*.png' %}" class="w-16 h-16" alt="Weather Icon">
+          <h2 class="text-gray-600">Location: <span class="text-blue-600">{{ location }}</span></h2>
           <div class="flex items-center mb-2">
           <p class="text-gray-600 ml-0 font-bold">Condition: <span id="cond" class="text-yellow-600 font-semibold">{{ weather_main }}</span></p>
             <p class="text-gray-600 ml-3">Description: <span class="text-yellow-600 font-semibold">{{ weather_description }}</span></p>
         </div>
-          <p class="text-gray-600">Temperature: <span class="text-red-600">{{ temperature }}°C</span></p>
-          <p class="text-gray-600">Apparent Temperature: <span class="text-green-800">{{ feels_like }}°C</span></p>
-          <p class="text-gray-600">Humidity: <span class="text-green-800">{{ humidity }}%</span></p>
-          <p class="text-gray-600">Wind Speed: <span class="text-green-800">{{ wind_speed }}m/s</span></p>
+          <p class="text-gray-600">Temperature: <span class="text-red-600">{{ temperature|floatformat:2 }}°C</span></p>
+          <p class="text-gray-600">Apparent Temperature: <span class="text-green-800">{{ feels_like|floatformat:2 }}°C</span></p>
+          <p class="text-gray-600">Humidity: <span class="text-blue-600">{{ humidity }}%</span></p>
+          <p class="text-gray-600">Wind Speed: <span class="text-blue-600">{{ wind_speed }}m/s</span></p>
           <p class="text-gray-600">Wind Direction: <span class="text-green-800">{{ wind_direction }}°</span></p>
-          <p class="text-gray-600">Pressure:: <span class="text-green-800">{{ pressure }}hPa</span></p>
-          <p class="text-gray-600">Cloud Cover: <span class="text-green-800">{{ cloud_cover }}%</span></p>
+          <p class="text-gray-600">Pressure:: <span class="text-blue-600">{{ pressure }}hPa</span></p>
+          <p class="text-gray-600">Cloud Cover: <span class="text-blue-600">{{ cloud_cover }}%</span></p>
           <p class="text-gray-600">Sunrise: <span class="text-green-800">{{ sunrise }}</span></p>
           <p class="text-gray-600">Sunset: <span class="text-green-800">{{ sunset }}</span></p>
-          <p class="text-gray-600">Rain Last Hour: <span class="text-green-800">{{ rain_last_hour }}mm</span></p>
+          <p class="text-gray-600">Rain Last Hour: <span class="text-blue-600">{{ rain_last_hour }}mm</span></p>
         </div>
 
       <!-- Hourly Forecast Example -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
         <h2 class="text-xl font-bold mb-2 text-green-700">06:00 AM</h2>
         <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163622.png" alt="Windy" class="w-16 h-16">
+          <img src="{% static 'images/windy.png' %}" alt="Windy" class="w-16 h-16">
           <p class="text-gray-600 ml-3">Condition: <span class="text-blue-600 font-semibold">Windy</span></p>
         </div>
         <p class="text-gray-600">Temperature: <span class="text-red-600">16°C</span></p>
@@ -198,23 +164,23 @@
     </div>
 
     <!--...........................Monthly Forecast Section (Initially Hidden)..................................-->
-    <div id="monthlyForecast" class="hidden">
+    <div id="monthlyForecast" class="hidden p-4 rounded-lg dark:bg-gray-900">
       <h2 class="text-2xl font-bold mb-4 text-green-700">Monthly Weather Forecast</h2>
       <p class="text-gray-600">Predictions for the entire month will help farmers plan for long-term activities.</p>
       <!-- Example Monthly Forecast -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+        <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
           <h2 class="text-xl font-bold mb-2 text-green-700">Average Temperature</h2>
-          <div class="flex items-center mb-2">
+          <div class="block items-center mb-2">
           <p class="text-gray-600">Day: <span class="text-red-600">27°C</span></p>
           <p class="text-gray-600">Night: <span class="text-red-600">15°C</span></p>
           </div>
         </div>
 
-        <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+        <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
           <h2 class="text-xl font-bold mb-2 text-green-700">Rainfall</h2>
           <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163657.png" alt="rainy" class="w-16 h-16">
+          <img src="{% static 'images/rainy.png' %}" alt="rainy" class="w-16 h-16">
           <p class="text-gray-600">Expected Rainfall: <span class="text-blue-600">120mm</span></p>
           </div>
         </div>
@@ -223,32 +189,32 @@
     </div>
 
     <!--..................................Yearly Forecast Section (Initially Hidden)................................-->
-    <div id="yearlyForecast" class="hidden">
-      <h2 class="text-2xl font-bold mb-4 text-green-700">Yearly Weather Forecast</h2>
-      <p class="text-gray-600">Yearly predictions provide a broader view for long-term agricultural strategies.</p>
+    <div id="yearlyForecast" class="hidden p-4 rounded-lg dark:bg-gray-900">
+      <h2 class="text-2xl font-bold mb-1 text-green-700">Yearly Weather Forecast</h2>
+      <p class="text-gray-600 mb-2">Yearly predictions provide a broader view for long-term agricultural strategies.</p>
       <!-- Example Yearly Forecast -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+        <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
           <h2 class="text-xl font-bold mb-2 text-green-700">Annual Rainfall</h2>
           <div class="flex items-center mb-2">
-          <img src="https://cdn-icons-png.flaticon.com/512/1163/1163657.png" alt="rainy" class="w-16 h-16">
+          <img src="{% static 'images/rainy.png' %}" alt="rainy" class="w-16 h-16">
           <p class="text-gray-600">Total Rainfall: <span class="text-blue-600">1350mm</span></p>
           </div>
         </div>
 
-        <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+        <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
           <h2 class="text-xl font-bold mb-2 text-green-700">Average Temperature</h2>
           <div class="flex items-center mb-2">
-            <img src="https://cdn-icons-png.flaticon.com/512/1163/1163664.png" class="w-16 h-16">
-            <span class="text-red-600">28°C</span></p>
+            <img src="{% static 'images/night.png' %}" class="w-16 h-16">
+            <p class="text-gray-600">Day: <span class="text-red-600">28°C</span></p><br>
           <p class="text-gray-600">Night: <span class="text-red-600">14°C</span></p>
           </div>
         </div>
 
-        <div class="bg-green-100 p-6 rounded-lg shadow-md _card">
+        <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
           <h2 class="text-xl font-bold mb-2 text-green-700">Frost Dates</h2>
           <div class="flex items-center mb-2">
-            <img src="https://cdn-icons-png.flaticon.com/512/1163/1163665.png" class="w-16 h-16">
+            <img src="{% static 'images/frost.png' %}" class="w-16 h-16">
             <p class="text-gray-600">Expected Frost Dates: <span class="text-blue-600">June 15 - June 20</span></p>
           </div>
         </div>
@@ -354,7 +320,7 @@ document.getElementById("w-icon").appendChild(imgElement);*/
   </script>
 
     <!-- Footer -->
-    <footer class="bg-green-800 text-white p-4 mt-12">
+    <footer class="fixed right-0 left-0 bottom-0 lg:relatibe xl:relative bg-green-800 text-white b-0 p-4 mt-8 md:mt-4 dark:bg-slate-900 dark:border-t-2 dark:border-gray-100">
         <div class="container mx-auto text-center">
             <p>&copy; 2024 Farm Weather Forecast | Designed for Farmers by Farmers</p>
         </div>
