@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriGuide</title>
+    <link rel="stylesheet" href="/home/skye/skye@fieldmanagement/AgriWise/AgriWiseApp/static/css/farmsphere.css">
+    <script src="/home/skye/skye@fieldmanagement/AgriWise/AgriWiseApp/static/js/farmsphere.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#crop-recommendations">Crop Recommendations</a></li>
+                <li><a href="#farm-history">Farm History</a></li>
+                <li><a href="#soil-health">Soil Health</a></li>
+                <li><a href="#weather-forecast">Weather Forecast</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="home">
+            <h1>Welcome to AgriGuide</h1>
+            <p>Your partner in precision farming</p>
+            <button>Get Started</button>
+        </section>
+        <section id="crop-recommendations">
+            <h2>Crop Recommendations</h2>
+            <form>
+                <label for="potassium-level">Potassium Level:</label>
+                <input type="number" id="potassium-level" name="potassium-level">
+                <label for="phosphorus-level">Phosphorus Level:</label>
+                <input type="number" id="phosphorus-level" name="phosphorus-level">
+                <label for="nitrogen-level">Nitrogen Level:</label>
+                <input type="number" id="nitrogen-level" name="nitrogen-level">
+                <label for="pH-level">pH Level:</label>
+                <input type="number" id="pH-level" name="pH-level">
+                <label for="temperature">Temperature:</label>
+                <input type="number" id="temperature" name="temperature">
+                <label for="rainfall">Rainfall:</label>
+                <input type="number" id="rainfall" name="rainfall">
+                <label for="humidity">Humidity:</label>
+                <input type="number" id="humidity" name="humidity">
+                <button>Get Recommendations</button>
+            </form>
+            <div id="recommendations-results"></div>
+        </section>
+        <section id="farm-history">
+            <h2>Farm History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Crop Name</th>
+                        <th>Planting Date</th>
+                        <th>Harvest Date</th>
+                        <th>Yield</th>
+                        <th>Soil Health</th>
+                    </tr>
+                </thead>
+                <tbody id="farm-history-table"></tbody>
+            </table>
+        </section>
+        <section id="soil-health">
+            <h2>Soil Health</h2>
+            <form>
+                <label for="desired-crop">Desired Crop:</label>
+                <input type="text" id="desired-crop" name="desired-crop">
+                <label for="potassium-level">Potassium Level:</label>
+                <input type="number" id="potassium-level" name="potassium-level">
+                <label for="phosphorus-level">Phosphorus Level:</label>
+                <input type="number" id="phosphorus-level" name="phosphorus-level">
+                <label for="nitrogen-level">Nitrogen Level:</label>
+                <input type="number" id="nitrogen-level" name="nitrogen-level">
+                <label for="pH-level">pH Level:</label>
+                <input type="number" id="pH-level" name="pH-level">
+                <button>Evaluate Soil Health</button>
+            </form>
+            <div id="soil-health-results"></div>
+        </section>
+        <section id="weather-forecast">
+            <h2>Weather Forecast</h2>
+            <div id="weather-forecast-widget"></div>
+        </section>
+        <section id="settings">
+            <h2>Settings</h2>
+            <form>
+                <label for="theme">Theme:</label>
+                <select id="theme" name="theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                    <option value="high-contrast">High Contrast</option>
+                </select>
+                 <button>Save Changes</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 AgriGuide. All rights reserved.</p>
+        <ul>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+        </ul>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
