@@ -1,20 +1,31 @@
 import json
 import os
-import time
-
+# import time
+from pathlib import Path
 import requests
-from datetim import datetime
-from django.conf import settings
-from get_coordinates import get_latitude_longitude
+from datetime import datetime
+# from django.conf import settings
+from .get_coordinates import get_latitude_longitude
 
 
 class Weather:
     def __init__(self, loc):
         self.loc = loc
-        try:
-            self.lat, self.lon = get_latitude_longitude(self.loc)
-        except requests.ReadTimeout:
-            pass
+        fname = f"weather/{self.loc.lower()}.conf"
+        coord_cache = os.path.join(Path(__file__).parent, fname)
+        if os.path.exists(coord_cache):
+            with open(coord_cache, 'r') as cache:
+                self.lat, self.lon = cache.read()
+        else:
+            try:
+                self.lat, self.lon = get_latitude_longitude(self.loc)
+                if self.lat and self.lon:
+                    data = f"({self.lat}, {self.lon})"
+                    print(data)
+                    with open(coord_cache, 'w') as cache:
+                        cache.write(data)
+            except requests.ReadTimeout:
+                print("Coordinates Read Timeout")
 
     def get_daily_forecast(self):
         url = f"https://api.open-meteo.com/v1/forecast?latitude={
@@ -30,7 +41,8 @@ class Weather:
         else:
             return None
 
-    def get_weekly_forecast(self):
+    def get_weekly_forecast(self, cache_file):
+
         url = f"https://api.open-meteo.com/v1/forecast?latitude={self.lat}&longitude={
             self.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,sunrise,sunset&timezone=auto"
 
@@ -38,13 +50,14 @@ class Weather:
 
         if response.status_code == 200:
             data = response.json()
-            with open("test.json", 'w') as fp:
+            with open(cache_file, 'w') as fp:
                 json.dump(data, fp, indent=4)
-            return data['daily']
+            return data
         else:
             return None
 
-    def get_weather_description(self, weather_code):
+    @staticmethod
+    def get_weather_description(weather_code):
         weather_codes = {
             0: "Clear sky",
             1: "Mainly clear",
@@ -73,16 +86,10 @@ class Weather:
 
         return weather_codes.get(weather_code, "Unknown weather code")
 
-    def _3hrs_forecast(self):
+    def _3hrs_forecast(self, path):
         api_key = 'd1fce76f166b700e091ab7848af756db'
 
-        current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-
-        weather_root = settings.MEDIA_ROOT
-
-        filename = f"weather/weather_data_{current_time}.json"
-
-        # if os.path.exists(filename)
+        # weather_root = settings.MEDIA_ROOT
 
         url = f'https://api.openweathermap.org/data/2.5/weather?lat={
             self.lat}&lon={self.lon}&appid={api_key}'
@@ -91,52 +98,76 @@ class Weather:
         if response.status_code == 200:
             weather_data = response.json()
 
-            json_file = os.path.join(weather_root, filename)
+            # json_file = os.path.join(weather_root, filename)
 
-            with open(json_file, 'w') as json_file:
+            with open(path, 'w') as json_file:
                 json.dump(weather_data, json_file, indent=4)
 
-            print(f"Data saved to {filename}")
+            print(f"Data saved to {path}")
 
             return weather_data
         else:
             return None
 
 
-def entry_7_retry(loc, max_attempts=5):
-    attempts = 0
-    forecast = None
+def main(loc, _type: str = 'daily7', max_attempts: bool = 5):
+    date = datetime.now().strftime("%Y-%m-%d")
+    if _type == 'daily7':
+        cache_file = f"weather/weekly_{loc.lower()}_{date}.json"
+        path = os.path.join(Path(__file__).parent, cache_file)
+        if os.path.exists(path):
+            print(f"Loading data from daily7 file {path}")
+            with open(path, 'r') as file:
+                return json.load(file)
 
-    while not forecast and attempts < max_attempts:
-        init = Weather(loc)
-        forecast = init.get_weekly_forecast()
-        attempts += 1
+        else:
+            init = Weather(loc)
+            forecast = init.get_weekly_forecast(cache_file)
 
-        if not forecast:
-            print("Failed to retrieve forecast, retrying...")
-            time.sleep(2)  # Wait for 2 seconds before retrying
+    elif _type == "hourly3":
+        filename = f"weather/horly3_{loc.lower()}_{date}.json"
+        cache_file = os.path.join(Path(__file__).parent, filename)
+        if os.path.exists(cache_file):
+            print(f"Loading data from horly3 file {cache_file}")
+            with open(cache_file, 'r') as json_file:
+                return json.load(json_file)
+        else:
+            init = Weather(loc)
+            forecast = init._3hrs_forecast(cache_file)
 
     if forecast:
         return forecast
     else:
-        print("Max attempts reached. Unable to retrieve forecast.")
+        print("Unable to retrieve forecast.")
         return None
 
 
-forecast = entry_retry("Nairobi")
-init = Weather("jhh")
+if __name__ == "__main__":
+    url = f"https://api.open-meteo.com/v1/forecast?latitude=-23.625&longitude=-46.875&current_weather=true"
 
-if forecast:
-    for day in forecast['time']:
-        index = forecast['time'].index(day)
-        desc = init.get_weather_description(forecast['weathercode'][index])
-        print(f"Date: {day}")
-        print(f"Max Temperature: {forecast['temperature_2m_max'][index]}°C")
-        print(f"Min Temperature: {forecast['temperature_2m_min'][index]}°C")
-        print(f"Precipitation: {forecast['precipitation_sum'][index]} mm")
-        print(f"Weather Code: {forecast['weathercode'][index]} {desc}")
-        print(f"Sunrise: {forecast['sunrise'][index]}")
-        print(f"Sunset: {forecast['sunset'][index]}")
-        print("-" * 30)
-else:
-    print("Failed to retrieve weather data.")
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+        print(data)
+        print("*"*100)
+        with open("test.json", 'w') as fl:
+            json.dump(data, fl, indent=4)
+        print(data['current_weather'])
+
+    '''forecast = main("Nairobi")
+    forecast = forecast['daily']
+    if forecast:
+        for day in forecast['time']:
+            index = forecast['time'].index(day)
+            desc = Weather.get_weather_description(forecast['weathercode'][index])
+            print(f"Date: {day}")
+            print(f"Max Temperature: {forecast['temperature_2m_max'][index]}°C")
+            print(f"Min Temperature: {forecast['temperature_2m_min'][index]}°C")
+            print(f"Precipitation: {forecast['precipitation_sum'][index]} mm")
+            print(f"Weather Code: {forecast['weathercode'][index]} {desc}")
+            print(f"Sunrise: {forecast['sunrise'][index]}")
+            print(f"Sunset: {forecast['sunset'][index]}")
+            print("-" * 30)
+    else:
+        print("Failed to retrieve weather data.")'''

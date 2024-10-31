@@ -22,6 +22,7 @@ from .forms import (CustomRegistrationForm, FarmDataForm, HealthDataForm,
 from .get_coordinates import get_latitude_longitude
 from .health import Health
 from .models import CustomUser, Profile
+from .Weather import main
 
 # from .forms import CustomRegistrationForm
 
@@ -37,13 +38,11 @@ def get_signupPage(request):
 
 
 def get_weatherPage(request):
+    loc = 'Embu'
+    data7 = main(loc)
     # Replace with your OpenWeatherMap API key
 
-    json_file = "/home/skye/skye@fieldmanagement/weather_data_2024-09-28_17-05-15.json"
-    with open(json_file, 'r') as json_file:
-        weather_data = json_file.read()
-    # Parse the JSON data
-    data = json.loads(weather_data)
+    data = main(loc, _type='hor7')
 
     # Extract relevant weather information
     context = {
@@ -68,7 +67,7 @@ def get_weatherPage(request):
         "sunset": datetime.fromtimestamp(data["sys"].get("sunset")).strftime("%H:%M:%S"),
     }
 
-    return render(request, 'weather.html', context)
+    return render(request, 'weather.html', {'hourly3': context, 'weekly': data7})
     '''else:
         return render(request, 'weather.html')  '''
 
@@ -256,7 +255,6 @@ def recommend(request):
             request.session['crop_rec'] = crop_rec
             return redirect(f"{reverse('home_crop_rec')}#crop_rec")
         else:
-            print(form.errors)
             return render(request, 'index.html', {'form': form})
             # return HttpResponse('<b>Invalid form</b>')
     else:

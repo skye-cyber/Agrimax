@@ -5,49 +5,108 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AgriMax - Cultivating Smarter Farms</title>
   {% load static %}
-  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+  <link href="{% static 'css/historymain.css' %}" rel="stylesheet">
+  <script type="text/javascript" src="{% static 'js/menu.js' %}" defer></script>
+  <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
 </head>
-    <body class="bg-green-50 text-gray-900">
+    <body class="bg-green-50 text-gray-900 dark:bg-slate-700">
+    <!-- Main Container -->
+    <div class="min-h-screen flex flex-col">
+    <!-- Main Content Area -->
+    <main class="flex-grow">
     <!-- Navigation Bar -->
-    <nav style="position: fixed; top: 0;" class="bg-green-700 w-full text-white p-4 shadow-lg">
-    <div class="container mx-auto flex justify-between items-center">
-        <a href="#" class="text-3xl font-bold">AgriMax</a>
-        <ul class="flex space-x-4">
-        <li><a href="{% url 'home' %}" class="hover:underline">Home</a></li>
-        <li><a href="{% url 'home' %}#crop-recommendation" class="hover:underline">Crop Recommendation</a></li>
-        <li><a href="{% url 'weather' %}" class="hover:underline">Weather Forecast</a></li>
-        <li><a href="{% url 'home' %}#soil-health" class="hover:underline">Soil Health</a></li>
-        </ul>
-    </div>
-    </nav>
+      <!-- Navigation Bar -->
+      <nav class="fixed top-0 w-full bg-green-700 pb-2 dark:bg-gray-900 text-white dark:shadow-xl sm:px-2 dark:text-gray-200 dark:border-b-2 dark:border-slate-900 shadow-lg z-50">
+          <div class="container mx-2">
+              <div class="flex justify-between items-center">
+                  <h1 class="text-2xl xl:text-3xl md:text-3xl lg:text-3xl font-bold">AgriMax</h1>
+                  <p class="top-0 right-5 fixed text-green-100 text-sm"><b>Welcome</b> <i class="underline">{{ user }}</i></p>
+              </div>
+                  <!-- Menu Button for Small Devices -->
+                  <button class="sm:flex md:hidden px-4 py-2 mt-2 font-bold rounded-md bg-cyan-500 ml-2 items-center" type="button" id="dropdown-button">
+                      Menu
+                  </button>
 
-    <!-- Farm History Page -->
-    <section id="farm-history" class="container mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-3xl font-bold mb-4 text-green-700">Farm History</h2>
+              <!-- Horizontal Menu for Medium and Larger Devices -->
+                <ul id="menu" class="hidden md:flex items-right lg:justify-end space-x-2 mt-1 pt-0 mt-2 overflow-x-wrap">
+                    <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
+                    <li><a href="{% url 'history' %}" class="hover:text-yellow-400">History</a></li>
+                    <li><a href="#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
+                    <li><a href="{% url 'weather' %}" class="hover:text-yellow-400">Weather</a></li>
+                    <li><a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a></li>
+                </ul>
+                <div class="fixed top-3 right-0 p-2 z-50">
+                <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400">
+                        <svg id="sun-icon" width="30" height="30" class="w-5 h-5" fill="currentColor" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="15" cy="15" r="6" fill="currentColor" />
+                            <line x1="15" y1="1" x2="15" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="15" y1="26" x2="15" y2="29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="1" y1="15" x2="4" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="26" y1="15" x2="29" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="5.5" y1="5.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="21.5" y1="21.5" x2="24.5" y2="24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="5.5" y1="24.5" x2="8.5" y2="21.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <line x1="21.5" y1="8.5" x2="24.5" y2="5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <svg id="moon-icon" width="30" height="30" viewBox="0 0 24 24" class="w-5 h-5 hidden" aria-hidden="true">
+                            <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10 8.13 8.13 0 0 1-10-10z"/>
+                        </svg>
+                  </button>
+                </div>
+                <!-- Dropdown Menu for Small Screens -->
+                <div id="dropdown-menu" class="absolute z-50 hidden bg-white dark:bg-gray-800 text-black dark:text-gray-200 border border-gray-300 dark:border-gray-600 mt-2 rounded-md shadow-lg overflow-hidden">
+                    <ul class="flex flex-col space-y-2 p-4">
+                      <li><a href="#crop-recommendation" class="hover:text-yellow-400">Recommendation</a></li>
+                      <li><a href="{% url 'history' %}" class="hover:text-yellow-400">History</a></li>
+                      <li><a href="#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
+                      <li><a href="{% url 'weather' %}" class="hover:text-yellow-400">Weather</a></li>
+                      <li><a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a></li>
+                    </ul>
+                </div>
+          </div>
+      </nav>
 
-    <!-- History Timeline -->
-    <div class="space-y-6">
-        <!-- Example history entry -->
-        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-bold text-green-700">July 2024 - Planted Maize</h3>
-        <p class="text-gray-700">Soil Health: Potassium: 40, Phosphorus: 35, Nitrogen: 50, PH: 6.5</p>
-        </div>
-        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-bold text-green-700">March 2024 - Planted Beans</h3>
-        <p class="text-gray-700">Soil Health: Potassium: 30, Phosphorus: 25, Nitrogen: 45, PH: 6.2</p>
-        </div>
-        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-        <h3 class="text-lg font-bold text-green-700">December 2023 - Planted Wheat</h3>
-        <p class="text-gray-700">Soil Health: Potassium: 50, Phosphorus: 40, Nitrogen: 55, PH: 6.8</p>
-        </div>
-    </div>
-</section>
+          <!-- Farm History Page -->
+      <section id="farm-history" class="container mx-auto my-32 p-6 bg-white rounded-lg shadow-md">
+          <h2 class="text-3xl font-bold mb-4 text-green-700">Farm History</h2>
 
+          <!-- History Timeline -->
+          <div class="space-y-6">
+              <!-- Example history entry -->
+              <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+              <h3 class="text-lg font-bold text-green-700">July 2024 - Planted Maize</h3>
+              <p class="text-gray-700">Soil Health: Potassium: 40, Phosphorus: 35, Nitrogen: 50, PH: 6.5</p>
+              </div>
+              <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+              <h3 class="text-lg font-bold text-green-700">March 2024 - Planted Beans</h3>
+              <p class="text-gray-700">Soil Health: Potassium: 30, Phosphorus: 25, Nitrogen: 45, PH: 6.2</p>
+              </div>
+              <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+              <h3 class="text-lg font-bold text-green-700">December 2023 - Planted Wheat</h3>
+              <p class="text-gray-700">Soil Health: Potassium: 50, Phosphorus: 40, Nitrogen: 55, PH: 6.8</p>
+              </div>
+          </div>
+      </section>
+  </main>
   <!-- Footer -->
-  <footer class="bg-green-700 text-white p-4 text-center">
-    <p>Contact Us: agrimax@contact.com | +254 700 000 000</p>
-    <p>&copy; 2024 AgriMax. All rights reserved.</p>
-  </footer>
+  <footer class="bg-green-700 text-white text-sm md:text-2xl p-4 dark:bg-gray-900 dark:text-gray-200 dark:border-b-2 dark:shadow-md dark:border-slate-900 shadow-lg">
+        <div class="text-center mb-2">
+            <a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a>
+        </div>
 
-</body>
+        <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <p id="contact" class="text-center">
+                Contact Us:
+                <a class="hover:text-yellow-400" href="mailto:agrimax@contact.com">📧 agrimax@contact.com</a>
+            </p>
+            <p class="text-center">
+                <a class="hover:text-yellow-400" href="tel:+254700000000">📱+254 700 000 000</a>
+            </p>
+        </div>
+
+        <p class="text-center">&copy; 2024 AgriMax. All rights reserved.</p>
+    </footer>
+  </div>
+
+  </body>
 </html>

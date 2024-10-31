@@ -10,13 +10,12 @@
   <script src="{% static 'js/darkmode.js' %}"></script>
   <!--<script src="https://cdn.tailcss.com"></script>-->
 </head>
-<body class="bg-green-50 font-serif dark:bg-slate-600">
+<body class="bg-green-50 font-serif dark:bg-slate-600 select-none cursor-default">
 
   <!-- Navigation Menu -->
   <nav class="bg-green-700 p-4 overflow-x-hidden fixed top-0 w-full z-50 dark:bg-slate-900 dark:border-b-2 dark:border-gray-100">
     <ul class="flex justify-around mr-10 space-x-1 lg:space-x-2 xl:space-x-2 items-right lg:justify-end xl:justify-end  text-white font-semibold">
       <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
-
       <li><a href="{% url 'home' %}#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
       <li><a href="{% url 'history' %}" class="hover:text-yellow-400">Farm History</a></li>
       <li><a href="{% url 'home' %}#contact" class="hover:text-yellow-400">Contact</a></li>
@@ -49,82 +48,78 @@
   <!-- Weather Page Container -->
   <div class="container mx-auto px-4 py-4 mb-8 mt-16 bg-white shadow-lg rounded-lg dark:bg-slate-800">
     <!-- Page Title -->
-    <h1 class="text-2xl p-auto my-2 md:text-3xl lg:text-4xl xl:text-4xl font-extrabold text-green-700 text-center">Weather Forecast</h1>
+    <h1 class="text-2xl p-auto my-2 md:text-3xl lg:text-4xl xl:text-4xl font-extrabold text-green-700 text-center dark:text-green-500">Weather Forecast</h1>
 
     <!-- Forecast and Weather Conditions -->
     <div id="button-container" class="flex justify-center mb-4 overflow-x-hidden">
       <button id="dailyToggle" class="btn   px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold rounded-l-lg hover:bg-green-500 transition">Daily</button>
       <button id="hourlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition">Hourly</button>
-      <button id="monthlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition">Monthly</button>
-      <button id="yearlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold rounded-r-lg hover:bg-green-500 transition">Yearly</button>
+      <button id="monthlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed" disabled>Monthly</button>
+      <button id="yearlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed rounded-r-md" disabled>Yearly</button>
     </div>
 
+    <h3 class="text-gray-700 text-3xl decoration:underline text-center dark:text-gray-400">Location Details:</h3>
+    <div class="block items-center justify-center ml-4 space-x-2">
+      <p class="text-gray-600 text-center dark:text-gray-400">Elevation (height above sea level): <span class="text-green-800 dark:text-green-600">{{ weekly.elevation }} M(meters)</span></p>
+      <p class="text-gray-600 text-center dark:text-gray-400">Timezone: <span class="text-blue-800 font-bold underline dark:text-blue-500">{{ weekly.timezone }} ({{ weekly.timezone_abbreviation }})</span></p>
+      <p class="flex underline"></p>
+    </div>
   <!--.....................................Daily Forecast 7 Days............................................-->
-    <div id="dailyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
-    <div class="grid gap-6 ml-2">
-      <!-- Sample Day Forecast -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-        <h2 class="text-xl font-bold mb-2 text-green-700">Monday</h2>
-        <div class="flex items-center mb-2">
-          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
-          <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
-        </div>
-        <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
-        <p class="text-gray-600">Humidity: <span class="text-green-800">50%</span></p>
-        <p class="text-gray-600">Wind Speed: <span class="text-green-800">12 km/h</span></p>
-      </div>
-
-      <!-- Additional Forecast Cards -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-        <h2 class="text-xl font-bold mb-2 text-green-700">Tuesday</h2>
-        <div class="flex items-center mb-2">
-          <img src="{% static 'images/cloudy.png' %}" alt="Cloudy" class="w-16 h-16">
-          <p class="text-gray-600 ml-3">Condition: <span class="text-gray-600 font-semibold">Cloudy</span></p>
-        </div>
-        <p class="text-gray-600">Temperature: <span class="text-red-600">26°C / 18°C</span></p>
-        <p class="text-gray-600">Humidity: <span class="text-green-800">65%</span></p>
-        <p class="text-gray-600">Wind Speed: <span class="text-green-800">15 km/h</span></p>
-      </div>
-    </div>
-
-    <div class="grid gap-6 ml-2">
-      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-        <h2 class="text-xl font-bold mb-2 text-green-700">Wednesday</h2>
-        <div class="flex items-center mb-2">
-          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
-          <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
-        </div>
-        <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
-        <p class="text-gray-600">Humidity: <span class="text-green-800">50%</span></p>
-        <p class="text-gray-600">Wind Speed: <span class="text-green-800">12 km/h</span></p>
-      </div>
-
-      <!-- Additional Forecast Cards -->
-      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-        <h2 class="text-xl font-bold mb-2 text-green-700">Thursday</h2>
-        <div class="flex items-center mb-2">
-          <img src="{% static 'images/cloudy.png' %}" alt="Cloudy" class="w-16 h-16">
-          <p class="text-gray-600 ml-3">Condition: <span class="text-gray-600 font-semibold">Cloudy</span></p>
-        </div>
-        <p class="text-gray-600">Temperature: <span class="text-red-600">26°C / 18°C</span></p>
-        <p class="text-gray-600">Humidity: <span class="text-green-800">65%</span></p>
-        <p class="text-gray-600">Wind Speed: <span class="text-green-800">15 km/h</span></p>
-      </div>
-    </div>
-
-    <div class="grid gap-6 mt-2 ml-2">
-      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-        <h2 class="text-xl font-bold mb-2 text-green-700">Friday</h2>
-        <div class="flex items-center mb-2">
-          <img src="{% static 'images/sunny.png' %}" alt="Sunny" class="w-16 h-16">
-          <p class="text-gray-600 ml-3">Condition: <span class="text-yellow-600 font-semibold">Sunny</span></p>
-        </div>
-        <p class="text-gray-600">Temperature: <span class="text-red-600">29°C / 16°C</span></p>
-        <p class="text-gray-600">Humidity: <span class="text-green-800">50%</span></p>
-        <p class="text-gray-600">Wind Speed: <span class="text-green-800">12 km/h</span></p>
-      </div>
-    </div>
-    </div>
+<div id="dailyForecast" class="grid cursor-wait grid-cols-1 ml-2 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
+    {% with weekly_data=weekly.daily %}
+      {% for day in weekly_data.time %}
+          {% with index=forloop.counter0 %}
+              {% with desc=weekly_data.weathercode|get_index:index|get_desc %}
+                  <div class="grid gap-6 ml-2 mb-4">
+                      <!-- Sample Day Forecast -->
+                      <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
+                          <h2 class="text-xl font-bold mb-2 text-green-700">{{day|get_day}}-{{day}}</h2>
+                          <div class="flex items-center mb-2">
+                              <img src="{% static 'images/' %}{{ desc|get_icon }}" alt="Weather Icon" class="w-16 h-16">
+                              <p class="text-gray-600 ml-3 dark:text-gray-300">Condition: <span class="text-yellow-600 font-semibold">{{ desc }}</span></p>
+                          </div>
+                          <p class="text-gray-600 dark:text-gray-200">Max Temperature: <span class="text-red-600 dark:text-red-500">{{ weekly_data.temperature_2m_max|get_index:index }}°C</span></p>
+                          <p class="text-gray-600 dark:text-gray-200">Min Temperature: <span class="text-orange-700 dark:text-orange-500">{{ weekly_data.temperature_2m_min|get_index:index }}°C</span></p>
+                          {% if weekly_data.humidity %}
+                              <p class="text-gray-600 dark:text-gray-200">Humidity: <span class="text-green-800 dark:text-green-400">{{ weekly_data.humidity}} %</span></p>
+                          {% else %}
+                              <p class="text-gray-600 dark:text-gray-200">Humidity: <span class="text-red-800 dark:text-red-400">~~Unavailable~~</span></p>
+                          {% endif %}
+                          {% if weekly_data.wind_speed %}
+                              <p class="text-gray-600 dark:text-gray-200">Wind Speed: <span class="text-green-800 dark:text-green-400">{{ weekly_data.wind_speed }} km/h</span></p>
+                           {% else %}
+                              <p class="text-gray-600 dark:text-gray-200">Wind Speed: <span class="text-yellow-700 dark:text-yellow-500">~~📛~~</span></p>
+                            {% endif %}
+                          <p class="text-gray-600 dark:text-gray-200">Precipitation: <span class="text-green-800 dark:text-green-400">{{ weekly_data.precipitation_sum|get_index:index }} mm</span></p>
+                          <p class="text-gray-600 dark:text-gray-200">Sunrise: <span class="text-green-800 dark:text-green-400">{{ weekly_data.sunrise|get_index:index|normal_time }}</span></p>
+                          <p class="text-gray-600 dark:text-gray-200">Sunset: <span class="text-green-800 dark:text-green-400">{{ weekly_data.sunset|get_index:index|normal_time }}</span></p>
+                      </div>
+                  </div>
+              {% endwith %}
+          {% endwith %}
+      {% endfor %}
+  {% endwith %}
+</div>
+  <!--<div id="openweathermap-widget-1" class="hidden w-full bg-green-100 p-6 rounded-lg shadow-md transition duration-200 ease-in-out hover:scale-105 dark:bg-slate-950 max-w-full overflow-hidden"></div>
+    <script src="//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js"></script>
+    <script>
+        window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
+        window.myWidgetParam.push({
+            id: 1,
+            cityid: '184745',
+            appid: 'd1fce76f166b700e091ab7848af756db',
+            units: 'metric',
+            containerid: 'openweathermap-widget-1',
+        });
+        (function () {
+            var script = document.createElement('script');
+            script.async = true;
+            script.charset = "utf-8";
+            script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(script, s);
+        })();
+    </script>-->
 
    <!--............................Hourly Forecast Section (Initially Hidden)...................................-->
     <div id="hourlyForecast" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden p-4 rounded-lg dark:bg-gray-900">
@@ -132,23 +127,23 @@
       <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
 
           <h2 class="text-xl font-bold mb-2 text-green-700">For 3 HRS</h2>
-          <h2 class="text-gray-600">Country: <span class="text-green-700">{{ country|default:"Value not found" }}</span></h2>
+          <h2 class="text-gray-600">Country: <span class="text-green-700">{{ hourly3.country|default:"Value not found" }}</span></h2>
           <img src="{% static 'images/*.png' %}" class="w-16 h-16" alt="Weather Icon">
-          <h2 class="text-gray-600">Location: <span class="text-blue-600">{{ location }}</span></h2>
+          <h2 class="text-gray-600">Location: <span class="text-blue-600">{{ hourly3.location }}</span></h2>
           <div class="flex items-center mb-2">
-          <p class="text-gray-600 ml-0 font-bold">Condition: <span id="cond" class="text-yellow-600 font-semibold">{{ weather_main }}</span></p>
-            <p class="text-gray-600 ml-3">Description: <span class="text-yellow-600 font-semibold">{{ weather_description }}</span></p>
+          <p class="text-gray-600 ml-0 font-bold">Condition: <span id="cond" class="text-yellow-600 font-semibold">{{ hourly3.weather_main }}</span></p>
+            <p class="text-gray-600 ml-3">Description: <span class="text-yellow-600 font-semibold">{{ hourly3.weather_description }}</span></p>
         </div>
-          <p class="text-gray-600">Temperature: <span class="text-red-600">{{ temperature|floatformat:2 }}°C</span></p>
-          <p class="text-gray-600">Apparent Temperature: <span class="text-green-800">{{ feels_like|floatformat:2 }}°C</span></p>
-          <p class="text-gray-600">Humidity: <span class="text-blue-600">{{ humidity }}%</span></p>
-          <p class="text-gray-600">Wind Speed: <span class="text-blue-600">{{ wind_speed }}m/s</span></p>
-          <p class="text-gray-600">Wind Direction: <span class="text-green-800">{{ wind_direction }}°</span></p>
-          <p class="text-gray-600">Pressure:: <span class="text-blue-600">{{ pressure }}hPa</span></p>
-          <p class="text-gray-600">Cloud Cover: <span class="text-blue-600">{{ cloud_cover }}%</span></p>
-          <p class="text-gray-600">Sunrise: <span class="text-green-800">{{ sunrise }}</span></p>
-          <p class="text-gray-600">Sunset: <span class="text-green-800">{{ sunset }}</span></p>
-          <p class="text-gray-600">Rain Last Hour: <span class="text-blue-600">{{ rain_last_hour }}mm</span></p>
+          <p class="text-gray-600">Temperature: <span class="text-red-600">{{ hourly3.temperature|floatformat:2 }}°C</span></p>
+          <p class="text-gray-600">Apparent Temperature: <span class="text-green-800">{{ hourly3.feels_like|floatformat:2 }}°C</span></p>
+          <p class="text-gray-600">Humidity: <span class="text-blue-600">{{ hourly3.humidity }}%</span></p>
+          <p class="text-gray-600">Wind Speed: <span class="text-blue-600">{{ hourly3.wind_speed }}m/s</span></p>
+          <p class="text-gray-600">Wind Direction: <span class="text-green-800">{{ hourly3.wind_direction }}°</span></p>
+          <p class="text-gray-600">Pressure:: <span class="text-blue-600">{{ hourly3.pressure }}hPa</span></p>
+          <p class="text-gray-600">Cloud Cover: <span class="text-blue-600">{{ hourly3.cloud_cover }}%</span></p>
+          <p class="text-gray-600">Sunrise: <span class="text-green-800">{{ hourly3.sunrise }}</span></p>
+          <p class="text-gray-600">Sunset: <span class="text-green-800">{{ hourly3.sunset }}</span></p>
+          <p class="text-gray-600">Rain Last Hour: <span class="text-blue-600">{{ hourly3.rain_last_hour }}mm</span></p>
         </div>
 
       <!-- Hourly Forecast Example -->
