@@ -16,7 +16,7 @@
 </head>
 <body class="bg-green-50 dark:bg-slate-700 select-none">
 <!-- Main Container -->
-<div class="min-h-screen flex flex-col">
+<div class="min-h-screen max-width-w-scree flex flex-col">
   <!-- Main Content Area -->
   <main class="flex-grow">
     <!-- Navigation Bar -->
@@ -78,7 +78,6 @@
               <a href="#crop-recommendation" class="mt-6 inline-block bg-yellow-500 text-green-900 px-6 sm:px-8 py-3 rounded-lg shadow-md hover:bg-yellow-600 transition-colors">Get Started</a>
           </div>
       </section>
-
       <!-- Crop Recommendation Form -->
       <section id="crop-recommendation" class="container mx-auto overflow-x-hidden my-10 p-6 bg-white rounded-lg shadow-lg dark:bg-slate-900 dark:border-slate-900">
         <h2 class="text-3xl font-bold mb-4 text-green-700 dark:text-green-700">Crop Recommendation</h2>

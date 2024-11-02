@@ -1,4 +1,4 @@
-import requests
+'''import requests
 from .get_cordinates impor
 
 class Weather:
@@ -50,7 +50,7 @@ if forecast:
 else:
     print("Failed to retrieve weather data.")
 
-'''# Example usage
+# Example usage
 latitude = 40.7128  # Latitude for New York City
 longitude = -74.0060  # Longitude for New York City
 
@@ -61,3 +61,5 @@ if weather:
     print(f"Wind speed: {weather['windspeed']} km/h")
 else:
     print("Failed to retrieve weather data.")'''
+
+print(f'2024-10-{str(1).zfill(8)}')

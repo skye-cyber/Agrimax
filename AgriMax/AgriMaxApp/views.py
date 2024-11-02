@@ -19,7 +19,6 @@ from django_ratelimit.decorators import ratelimit
 
 from .forms import (CustomRegistrationForm, FarmDataForm, HealthDataForm,
                     LocationForm)
-from .get_coordinates import get_latitude_longitude
 from .health import Health
 from .models import CustomUser, Profile
 from .Weather import main
@@ -40,9 +39,11 @@ def get_signupPage(request):
 def get_weatherPage(request):
     loc = 'Embu'
     data7 = main(loc)
-    # Replace with your OpenWeatherMap API key
 
     data = main(loc, _type='hourly3')
+
+    if (isinstance(data, str) and data in ("RequestFailure", "ConnectionError")) or (isinstance(data7, str) and data7 in ("RequestFailure", "ConnectionError")):
+        return render(request, 'error.html', {'error_message': data if isinstance(data, str) else data7}, status=404)
 
     # Extract relevant weather information
     context = {

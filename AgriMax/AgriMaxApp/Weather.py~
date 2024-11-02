@@ -6,24 +6,31 @@ import requests
 from datetime import datetime
 # from django.conf import settings
 from .get_coordinates import get_latitude_longitude
+import configparser
+
+# Create a configuration object
+config = configparser.ConfigParser()
 
 
 class Weather:
     def __init__(self, loc):
         self.loc = loc
-        fname = f"weather/{self.loc.lower()}.conf"
-        coord_cache = os.path.join(Path(__file__).parent, fname)
+        cfname = "weather/coordCache.cfg"
+        coord_cache = os.path.join(Path(__file__).parent, cfname)
         if os.path.exists(coord_cache):
-            with open(coord_cache, 'r') as cache:
-                self.lat, self.lon = cache.read()
+            config.read(coord_cache)
+            self.lat = config.get(f"{self.loc.lower()}coord", 'lat')
+            self.lon = config.get(f"{self.loc.lower()}coord", 'lon')
         else:
             try:
                 self.lat, self.lon = get_latitude_longitude(self.loc)
                 if self.lat and self.lon:
-                    data = f"({self.lat}, {self.lon})"
-                    print(data)
-                    with open(coord_cache, 'w') as cache:
-                        cache.write()
+                    # Add the section with the desired keys and values
+                    config._write_section(f"{self.loc.lower()}coord", {"lat": self.lat, "lon": self.lon})
+
+                    # Write the config object to a file
+                    with open(cfname, "w") as config_file:
+                        config.write(config_file)
             except requests.ReadTimeout:
                 print("Coordinates Read Timeout")
 
@@ -31,7 +38,13 @@ class Weather:
         url = f"https://api.open-meteo.com/v1/forecast?latitude={
             self.lat}&longitude={self.lon}&current_weather=true"
 
-        response = requests.get(url)
+        try:
+            response = requests.get(url)
+        except requests.exceptions.ConnectionError:
+            return "ConnectionError"
+        except Exception as e:
+            print(e)
+            return "RequestFailure"
 
         if response.status_code == 200:
             data = response.json()
@@ -46,12 +59,27 @@ class Weather:
         url = f"https://api.open-meteo.com/v1/forecast?latitude={self.lat}&longitude={
             self.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,sunrise,sunset&timezone=auto"
 
-        response = requests.get(url)
+        try:
+            response = requests.get(url)
+        except requests.exceptions.ConnectionError:
+            return "ConnectionError"
+        except Exception as e:
+            print(e)
+            return "RequestFailure"
 
         if response.status_code == 200:
             data = response.json()
-            with open(cache_file, 'w') as fp:
-                json.dump(data, fp, indent=4)
+            if not os.path.exists(os.path.dirname(cache_file)):
+                os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+            if not os.path.isfile(cache_file):
+                parent_dir = os.path.dirname(cache_file)
+                if not os.access(parent_dir, os.W_OK):  # Check access permission
+                    raise PermissionError(f"Cannot write to the parent directory '{parent_dir}'")
+            try:
+                with open(str(cache_file), 'w') as fp:
+                    json.dump(data, fp, indent=4)
+            except Exception as e:
+                print(f"Error saving to cache file '{cache_file}'. {e}")
             return data
         else:
             return None
@@ -94,7 +122,14 @@ class Weather:
         url = f'https://api.openweathermap.org/data/2.5/weather?lat={
             self.lat}&lon={self.lon}&appid={api_key}'
 
-        response = requests.get(url, timeout=None)
+        try:
+            response = requests.get(url, timeout=None)
+        except requests.exceptions.ConnectionError:
+            return "ConnectionError"
+        except Exception as e:
+            print(e)
+            return "RequestFailure"
+
         if response.status_code == 200:
             weather_data = response.json()
 
@@ -113,11 +148,11 @@ class Weather:
 def main(loc, _type: str = 'daily7', max_attempts: bool = 5):
     date = datetime.now().strftime("%Y-%m-%d")
     if _type == 'daily7':
-        cache_file = f"weather/weekly_{loc.lower()}_{date}.json"
-        path = os.path.join(Path(__file__).parent, cache_file)
+        filename = f"weather/weekly_{loc.lower()}_{date}.json"
+        cache_file = os.path.join(Path(__file__).parent, filename)
         if os.path.exists(path):
-            print(f"Loading data from daily7 file {path}")
-            with open(path, 'r') as file:
+            print(f"Loading data from daily7 file {cache_file}")
+            with open(cache_file, 'r') as file:
                 return json.load(file)
 
         else:
@@ -143,7 +178,7 @@ def main(loc, _type: str = 'daily7', max_attempts: bool = 5):
 
 
 if __name__ == "__main__":
-    url = f"https://api.open-meteo.com/v1/forecast?latitude=-23.625&longitude=-46.875&current_weather=true"
+    url = "https://api.open-meteo.com/v1/forecast?latitude=-23.625&longitude=-46.875&current_weather=true"
 
     response = requests.get(url)
 

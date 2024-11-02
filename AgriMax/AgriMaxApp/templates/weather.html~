@@ -8,7 +8,6 @@
     {% load static %}
   <link href="{% static 'css/weathermain.css' %}" rel="stylesheet" >
   <script src="{% static 'js/darkmode.js' %}"></script>
-  <!--<script src="https://cdn.tailcss.com"></script>-->
 </head>
 <body class="bg-green-50 font-serif dark:bg-slate-600 select-none cursor-default">
 
@@ -21,7 +20,7 @@
       <li><a href="{% url 'home' %}#contact" class="hover:text-yellow-400">Contact</a></li>
     </ul>
     <div class="fixed top-2 right-0 p-2 z-50">
-          <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400">
+          <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400 text-white">
                   <svg id="sun-icon" width="30" height="30" class="w-5 h-5" fill="currentColor" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
                       <circle cx="15" cy="15" r="6" fill="currentColor" />
                       <line x1="15" y1="1" x2="15" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -39,7 +38,7 @@
             </button>
     </div>
   </nav>
-
+{% block content %}
   <!-- Floating Weather Alert -->
   <div id="weatherAlert" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out visible opacity-1 bg-yellow-100 text-yellow-800 mt-8 p-4 rounded-lg shadow-lg">
     <p><strong>Alert:</strong> A significant drop in temperature is expected tomorrow. Protect young crops!</p>
@@ -65,7 +64,7 @@
       <p class="flex underline"></p>
     </div>
   <!--.....................................Daily Forecast 7 Days............................................-->
-<div id="dailyForecast" class="grid cursor-wait grid-cols-1 ml-2 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
+<div id="dailyForecast" class="grid grid-cols-1 ml-2 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
     {% with weekly_data=weekly.daily %}
       {% for day in weekly_data.time %}
           {% with index=forloop.counter0 %}
