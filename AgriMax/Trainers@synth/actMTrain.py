@@ -49,17 +49,23 @@ handler.setFormatter(CustomFormatter("- %(levelname)s - %(message)s"))
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
 
-path = 'dataset/super_crops_synth_.csv'
-models_folder = "super@models"
+path = 'activity_dataset.csv'
+models_folder = "models"
 logger.info(f"[*]Dataset: \033[1;94m{path}\033[0m")
 df = pd.read_csv(path)
 
+# Perform one-hot encoding on categorical columns
+df = pd.get_dummies(df, columns=['crop', 'dryness_score'], drop_first=True)
+
+# Ensure target variable is numeric or properly encoded
+if df['activity'].dtype == 'object':
+    df['activity'] = df['activity'].astype('category').cat.codes
+
+
 # Function to separate features and target
-
-
 def separate_features_target(df):
-    features = df.iloc[:, :-1]
-    target = df['crop']
+    features = df.iloc[:, 1:-1]
+    target = df['activity']
     return features, target
 
 # Function to split the data
@@ -69,25 +75,21 @@ def split_data(features, target):
     return train_test_split(features, target, test_size=0.2, random_state=42)
 
 
-def get_best_param(model='RFC'):
-    logger.info("[+] Hyper Parameter tuning..")
+def get_best_param():
     # instantiate the RFC
-    if model == "RFC":
-        logger.info("[+] RFC")
-        rf = RandomForestClassifier(random_state=42)
-    elif model == "DC":
-        logger.info("[+] DC")
-        rf = DecisionTreeClassifier(random_state=42)
+    logger.info("[+]Hyper Parameter tuning..")
+    rf = RandomForestClassifier()
     features, target = separate_features_target(df)
     X_train, X_test, y_train, y_test = split_data(features, target)
     param_grid = {
         # Number of trees in the forest
-        # 'n_estimators': [6, 10, 20, 50, 100, 200],
-        'max_depth': [None, 1, 2, 3, 4, 5, 6],  # minimum depth of trees
-        # 'max_leaf_nodes': [2101, 2102, 2103, 2100,],
-        'random_state': [None, 1, 2, 4, 6, 12]
+        "random_state": [2, 42],
+        'n_estimators': [2, 10, 20, 50, 100, 200],
+        'max_depth': [None, 7, 10, 15, 20, 30],  # minimum depth of trees
         # minimum number of samples required to split a node
-        # 'min_samples_split': [2, 5, 10]
+        'min_samples_split': [2, 5, 10],
+        'max_leaf_nodes': [i for i in range(2, 10_000)],
+        'criterion': ['gini', 'entropy']
     }
     # set the grid search with 5-fold cross-validation and 100 iterations = n_iter=100,
     # n_jobs=-1 to use all available cpu
@@ -96,7 +98,7 @@ def get_best_param(model='RFC'):
     # fit the grid search to the training data
     grid_search.fit(X_train, y_train)
 
-    logger.info(f"Best Parameters: \033[0;1m{grid_search.best_params_}\033[0m")
+    print("Best Parameters:", grid_search.best_params_)
 
 
 # Function to handle model training and saving
@@ -130,9 +132,10 @@ def train_and_save_model(model, model_name, X_train, y_train, X_test, y_test, fe
 
 def _DecisionTree(X_train, y_train, X_test, y_test, features, target):
     # criterion: entropy, gini,log_loss
-    DecisionTree = DecisionTreeClassifier(max_leaf_nodes=2101, random_state=2)  # 77.30% 61.65
+    DecisionTree = DecisionTreeClassifier(
+        criterion="gini", max_leaf_nodes=30, random_state=2, min_samples_split=5, n_estimators=50)  # 77.30% 61.65
     train_and_save_model(DecisionTree, 'Decision Tree', X_train,
-                         y_train, X_test, y_test, features, target, 'DecisionTree.pkl')
+                         y_train, X_test, y_test, features, target, 'ActDc.pkl')
 
 
 def _LightGBM(X_train, y_train, X_test, y_test, features, target):
@@ -157,9 +160,9 @@ def _Logistic_Regression(X_train, y_train, X_test, y_test, features, target):
 
 def _RFC(X_train, y_train, X_test, y_test, features, target):
     RFC = RandomForestClassifier(
-        n_estimators=100, min_samples_split=2, max_leaf_nodes=2_143, random_state=42)
+        n_estimators=55, max_leaf_nodes=100_000, random_state=42)
     train_and_save_model(RFC, 'Random Forest Classifier', X_train,
-                         y_train, X_test, y_test, features, target, 'RFClassifier.pkl')
+                         y_train, X_test, y_test, features, target, 'RFClassifier_.pkl')
 
 
 def _XGBoost(df):
@@ -179,7 +182,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="Train Crop Recommendation models")
     parser.add_argument('--model', '-m', choices=["xgboost", "RFC", "LR", "SVM",
-                        'lightgbm', 'decision_tree', "DC"], type=str, help="Choose model to train default=all")
+                        'lightgbm', 'decision_tree'], type=str, help="Choose model to train default=all")
     args = parser.parse_args()
     model = args.model
 
@@ -187,7 +190,7 @@ def main():
     X_train, X_test, y_train, y_test = split_data(features, target)
 
     if model:
-        if model == "xgboost":
+        if model.upper() == "xgboost":
             _XGBoost(df)
         elif model.upper() == "RFC":
             _RFC(X_train, y_train, X_test, y_test, features, target)
@@ -196,12 +199,12 @@ def main():
                                  y_test, features, target)
         elif model.upper() == "SVM":
             _SVM(X_train, y_train, X_test, y_test, features, target)
-        elif model.lower() == 'lightgbm':
+        elif model.upper() == 'lightgbm':
             _LightGBM(X_train, y_train, X_test, y_test, features, target)
-        elif model.lower() in ('decision_tree', 'dc'):
+        elif model.upper() == 'decision_tree':
             _DecisionTree(X_train, y_train, X_test, y_test, features, target)
 
 
 if __name__ == "__main__":
-    # get_best_param('DC')
-    main()
+    get_best_param()
+    # main()

@@ -65,15 +65,15 @@ df = dd.read_csv(path)
 # Converting Dask DataFrame to pandas for further operations
 df = df.compute()
 
-'''INSPECT
-# print(df.head())  # csv head
-# print(df.shape)  # Number of columns
-# print(df.columns)  # Column names
-# print(df['crop'].unique())  # get a column
-# print(df.dtypes)  # Column datatype
-# print(df['crop'].value_counts())  # Number of crop occurences
+# INSPECT
+print(df.head())  # csv head
+print(df.shape)  # Number of columns
+print(df.columns)  # Column names
+print(df['crop'].unique())  # get a column
+print(df.dtypes)  # Column datatype
+print(df['crop'].value_counts())  # Number of crop occurences
 
-
+'''
 # Get the min and max for each numerical column
 # min_values = df.min()
 # max_values = df.max()

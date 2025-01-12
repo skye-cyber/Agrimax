@@ -16,18 +16,18 @@
 </head>
 <body class="bg-green-50 dark:bg-slate-700 select-none">
 <!-- Main Container -->
-<div class="min-h-screen max-width-w-scree flex flex-col">
+<div class="min-h-screen max-width-w-screen flex flex-col">
   <!-- Main Content Area -->
   <main class="flex-grow">
     <!-- Navigation Bar -->
-    <nav class="fixed top-0 w-full bg-green-700 pb-2 dark:bg-gray-900 text-white dark:shadow-xl sm:px-2 dark:text-gray-200 dark:border-b-2 dark:border-slate-900 shadow-lg z-50">
+    <nav class="fixed top-0 f w-full bg-green-700 pb-2 dark:bg-gray-900 text-white dark:shadow-xl sm:px-2 dark:text-gray-200 dark:border-b-2 dark:border-slate-900 shadow-lg z-50">
         <div class="container mx-2">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl xl:text-3xl md:text-3xl lg:text-3xl font-bold">AgriMax</h1>
                 <p class="top-0 right-5 fixed text-green-100 text-sm"><b>Welcome</b> <i class="underline">{{ user }}</i></p>
             </div>
                 <!-- Menu Button for Small Devices -->
-                <button class="sm:flex md:hidden px-4 py-2 mt-2 font-bold rounded-md bg-cyan-500 ml-2 items-center" type="button" id="dropdown-button">
+                <button class="flex md:hidden px-4 py-2 mt-2 font-bold rounded-md bg-cyan-500 ml-2 items-center" type="button" id="dropdown-button">
                     Menu
                 </button>
 

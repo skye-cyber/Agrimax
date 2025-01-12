@@ -3,7 +3,7 @@ import pandas as pd
 
 print("\033[32mGenerating entries ...\033[0m")
 # Define the number of entries
-num_entries = 3_000_000
+num_entries = 100_000
 
 # Generate data using more realistic distributions
 np.random.seed(0)  # For reproducibility
@@ -99,12 +99,12 @@ data = pd.DataFrame({
 })
 
 # Save the synthetic data to a CSV or display it
-data.to_csv('dataset/synthetic_dataset_with_enhanced_crops.csv', index=False)
+data.to_csv('dataset/super_crops_synth.csv', index=False)
 # print(data.head(20))  # Display the first 20 rows of the dataset
-df = pd.read_csv('dataset/synthetic_dataset_with_enhanced_crops.csv')
+df = pd.read_csv('dataset/super_crops_synth.csv')
 
 print("\033[32mClean the data/remove duplicates\033[0m")
 clean_df = df.drop_duplicates()
 clean_df.to_csv(
-    'dataset/synthetic_dataset_with_enhanced_crops.csv', index=False)
+    'dataset/super_crops_synth.csv', index=False)
 print("✅")

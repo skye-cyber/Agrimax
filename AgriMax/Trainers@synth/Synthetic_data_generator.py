@@ -5,7 +5,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 # Define the number of entries
 print("\033[32mGenerating entries ...\033[0m")
-num_entries = 2_000_000  # RFC  3_360_000->67.89%
+num_entries = 100_000  # RFC  3_360_000->67.89%
 
 crop_conditions = {
     'rice': {'temperature': (25, 35), 'rainfall': (250, 400), 'pH': (6.0, 7.0), 'N': (80, 120), 'P': (70, 90), 'K': (100, 120), 'humidity': (80, 100)},
@@ -106,4 +106,4 @@ df.to_csv('dataset/super_crops_synth.csv', index=False)
 # Remove duplicates and save the cleaned dataset
 print("\033[32mRemove duplicates and save the cleaned dataset\033[0m")
 clean_df = df.drop_duplicates()
-clean_df.to_csv('dataset/super_crops_synth_.csv', index=False)
+clean_df.to_csv('dataset/super_crops_synth.csv', index=False)

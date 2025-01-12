@@ -1,65 +1,74 @@
-'''import requests
-from .get_cordinates impor
+from __future__ import print_function
 
-class Weather:
-    def __init__(self, loc):
-        self.loc = loc
+import argparse
+import logging
+import os
+import pickle
+import warnings
+import dask.dataframe as dd
+import lightgbm as lgb
+# import matplotlib.pyplot as plt
+# import numpy as np
+import pandas as pd
+# import plotly.express as px
+# import seaborn as sns
+from colorama import Fore, Style, init
+# from sklearn import metrics, tree
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import cross_val_score, train_test_split
+# from sklearn.naive_bayes import GaussianNB
+from sklearn.preprocessing import LabelEncoder
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from xgboost import XGBClassifier
 
-    def get_weather_open_meteo(latitude, longitude):
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={
-            latitude}&longitude={longitude}&current_weather=true"
+warnings.filterwarnings('ignore')
 
-        response = requests.get(url)
+init(autoreset=True)
 
-        if response.status_code == 200:
-            data = response.json()
-            return data['current_weather']
-        else:
-            return None
-
-    def get_weekly_forecast(latitude, longitude):
-        url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={
-            longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,sunrise,sunset&timezone=auto"
-
-        response = requests.get(url)
-
-        if response.status_code == 200:
-            data = response.json()
-            return data['daily']
-        else:
-            return None
+# Custom formatter class to add colors
 
 
-# Example usage
-latitude = 40.7128  # Latitude for New York City
-longitude = -74.0060  # Longitude for New York City
+class CustomFormatter(logging.Formatter):
+    COLORS = {
+        logging.DEBUG: Fore.BLUE,
+        logging.INFO: Fore.GREEN,
+        logging.WARNING: Fore.YELLOW,
+        logging.ERROR: Fore.RED,
+        logging.CRITICAL: Fore.MAGENTA
+    }
 
-forecast = get_weekly_forecast(latitude, longitude)
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelno, Fore.WHITE)
+        log_message = super().format(record)
+        return f"{log_color}{log_message}{Style.RESET_ALL}"
 
-if forecast:
-    for day in forecast['time']:
-        index = forecast['time'].index(day)
-        print(f"Date: {day}")
-        print(f"Max Temperature: {forecast['temperature_2m_max'][index]}°C")
-        print(f"Min Temperature: {forecast['temperature_2m_min'][index]}°C")
-        print(f"Precipitation: {forecast['precipitation_sum'][index]} mm")
-        print(f"Weather Code: {forecast['weathercode'][index]}")
-        print(f"Sunrise: {forecast['sunrise'][index]}")
-        print(f"Sunset: {forecast['sunset'][index]}")
-        print("-" * 30)
-else:
-    print("Failed to retrieve weather data.")
 
-# Example usage
-latitude = 40.7128  # Latitude for New York City
-longitude = -74.0060  # Longitude for New York City
+# Set up logging
+logger = logging.getLogger("colored_logger")
+handler = logging.StreamHandler()
+handler.setFormatter(CustomFormatter("- %(levelname)s - %(message)s"))
 
-weather = get_weather_open_meteo(latitude, longitude)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
-if weather:
-    print(f"Current temperature: {weather['temperature']}°C")
-    print(f"Wind speed: {weather['windspeed']} km/h")
-else:
-    print("Failed to retrieve weather data.")'''
+path = 'dataset/super_crops_synth.csv'
 
-print(f'2024-10-{str(1).zfill(8)}')
+models_folder = "models"
+logger.info(f"Dataset: \033[1;94m{path}\033[0m")
+df = pd.read_csv(path)
+
+# Dask DataFrame
+df = pd.read_csv(path)
+# Converting Dask DataFrame to pandas for further operations
+# df = df.compute()
+
+# INSPECT
+print(df.head())  # csv head
+print(df.shape)  # Number of columns
+print(df.columns)  # Column names
+print(df['crop'].unique())  # get a column
+print(df.dtypes)  # Column datatype
+print(df['crop'].value_counts())  # Number of crop occurences

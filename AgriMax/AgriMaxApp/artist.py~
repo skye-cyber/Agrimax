@@ -25,7 +25,7 @@ class Draw:
         plt.pie(percentages, labels=crops, autopct='%1.1f%%', startangle=140)
         plt.title('Crop Suitability Distribution')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'PieChart_{tu}'))
+        /home/skye/skye@fieldmanagement/AgriMax/dep_graph.py
 
     def BarChart(self):
         crops = ['Barley', 'Blackgram', 'Apple',
