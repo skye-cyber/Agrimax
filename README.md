@@ -59,7 +59,7 @@ This project relies on the following Python packages and modules:
   - configparser
 
 ### Dependency Graph
-![dependency-graph](./AgriMax/dep_graph.png)
+![dependency-graph](dep_graph.png)
 
 ---
 ## Installation
