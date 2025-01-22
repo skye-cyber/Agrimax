@@ -31,7 +31,7 @@ ALLOWED_HOSTS = ['172.17.88.230', '127.0.0.1', 'e4e6-196-250-210-165.ngrok-free.
 CSRF_TRUSTED_ORIGINS = [
     'https://8fab-41-209-57-163.ngrok-free.app',
     "https://c660-196-250-215-185.ngrok-free.app",
-    "https://e4e6-196-250-210-165.ngrok-free.app"# ngrok
+    "https://e4e6-196-250-210-165.ngrok-free.app" # ngrok
 ]
 
 # Application definition
@@ -141,6 +141,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = os.path.join(BASE_DIR, 'static/')
+
+if DEBUG:
+    STATIC_URL = os.path.join(BASE_DIR, 'AgriMaxApp/static/')
+
+print(STATIC_URL)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

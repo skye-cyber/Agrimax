@@ -13,14 +13,16 @@
   <script type="text/javascript" src="{% static 'js/helper.js' %}" defer></script>
   <script type="text/javascript" src="{% static 'js/script.js' %}" defer></script>
   <script type="text/javascript" src="{% static 'js/menu.js' %}" defer></script>
+  <script type="text/javascript" src="{% static 'js/analytics.js' %}" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" crossorigin="anonymous">
 </head>
-<body class="bg-green-50 dark:bg-slate-700 select-none">
+<body class="bg-green-50 dark:bg-black select-none">
 <!-- Main Container -->
-<div class="min-h-screen max-width-w-screen flex flex-col">
+<div class="min-h-screen max-w-screen">
   <!-- Main Content Area -->
   <main class="flex-grow">
     <!-- Navigation Bar -->
-    <nav class="fixed top-0 w-full bg-green-700 pb-2 dark:bg-gray-900 text-white dark:shadow-xl sm:px-2 dark:text-gray-200 dark:border-b-2 dark:border-slate-900 shadow-lg z-50">
+    <nav class="fixed top-0 w-full bg-green-700 pb-2 dark:bg-slate-950 text-white dark:shadow-xl sm:px-2 dark:text-gray-200 dark:border-b-2 dark:border-slate-900 shadow-lg z-50">
         <div class="container mx-2">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl xl:text-3xl md:text-3xl lg:text-3xl font-bold">AgriMax</h1>
@@ -71,7 +73,7 @@
     </nav>
 
       <!-- Hero Section -->
-      <section id="insight-section" class="text-center bg-cover bg-center h-screen overflow-x-hidden flex items-center justify-center bg-light-img dark:bg-dark-img">
+      <section id="insight-section" class="flex text-center bg-cover bg-center h-screen overflow-x-hidden flex items-center justify-center bg-light-img dark:bg-dark-img">
           <div class="bg-green-800 bg-opacity-50 p-6 sm:p-10 rounded-md mx-1">
               <h1 class="text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white" id="intro1"></h1>
               <p class="text-lg md:text-xl text-white mt-4" id="intro2"></p>
@@ -138,28 +140,32 @@
           </div>
           <button type="submit" id="rec_" class="mt-4 bg-green-700 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-800" onsubmit="validateForm()">Submit</button>
         </form>
-        <p class="mt-2 border-2 border-gray-400 border-double"></p>
-        <section class="container mx-auto my-2 p-2 bg-white rounded-lg shadow-xl dark:border-slate-600 dark:text-white dark:focus:border-slate-400 dark:bg-slate-800" id="crop_rec">
-            <h1 class="text-green-700 dark:text-green-400 underline decoration-double">Crop Recommendations</h1>
 
-            <h2 class="font-bold text-lg">
-              <span class="underline">Recommendation</span>
-              <span class="ml-8 underline">Score (Success Rate)</span>
-            </h2>
-            {% if crop_rec %}
-              {% for crop, metrics in crop_rec.items %}
-                <div class="mb-4 p-4 border rounded-md border-gray-300 shadow-md dark:border-t-2 dark:border-x-2 dark:border-b-4 dark:border-x-cyan-400 dark:border-b-sky-500 dark:border-t-purple-400 bg-gray-50 dark:bg-slate-900 dark:shadow-black hover:shadow-lg transition-shadow duration-200">
+        <p class="mt-2 border-2 border-green-500 dark:border-blue-500 border-double"></p>
 
-                  <strong class="overline underline decoration-lime-900 dark:decoration-lime-400 hover:decoration-rose-300 dark:text-amber-400 dark:hover:text-fuchsia-400">{{crop|capfirst}} :</strong>
-                  <span class="text-green-700 dark:text-green-400 ml-8">{{metrics|get_percent|floatformat:2}}%</span>
-                </div>
-              {% endfor %}
-            {% else %}
-              <p class="dark:text-orange-500">No recommendations available yet.</p>
-            {% endif %}
-        </section>
+        {% if crop_rec %}
+          <section class="container mx-auto my-2 p-2 bg-white rounded-lg shadow-xl dark:border-slate-600 dark:text-white dark:focus:border-slate-400 dark:bg-slate-800" id="crop_rec">
+              <h1 class="text-green-700 dark:text-green-400 underline decoration-double">Crop Recommendations</h1>
+
+              <button id="analyticsShow" type="submit" class="p-2 bg-yellow-400 text-black rounded hover:bg-yellow-500 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"> View Analytics </button>
+              <h2 class="font-bold text-lg">
+                <span class="underline">Recommendation</span>
+                <span class="ml-8 underline">Score (Success Rate)</span>
+              </h2>
+                {% for crop, metrics in crop_rec.items %}
+                  <div class="mb-4 p-4 border rounded-md border-gray-300 shadow-md dark:border-t-2 dark:border-x-2 dark:border-b-4 dark:border-x-cyan-400 dark:border-b-sky-500 dark:border-t-purple-400 bg-gray-50 dark:bg-slate-900 dark:shadow-black hover:shadow-lg transition-shadow duration-200">
+
+                    <strong class="overline underline decoration-lime-900 dark:decoration-lime-400 hover:decoration-rose-300 dark:text-amber-400 dark:hover:text-fuchsia-400">{{crop|capfirst}} :</strong>
+                    <span class="text-green-700 dark:text-green-400 ml-8">{{metrics|get_percent|floatformat:2}}%</span>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p class="dark:text-orange-500">No recommendations available yet.</p>
+          </section>
+        {% endif %}
 
     </section>
+
 
       <!-- Soil Health Evaluation Page -->
     <section id="soil-health" class="container mx-auto overflow-x-hidden my-10 p-6 bg-white rounded-lg shadow-md dark:bg-slate-900 dark:border-slate-900">
@@ -239,11 +245,12 @@
     form.addEventListener('submit', validateForm);">Evaluate</button>
       </form>
               <!-- Placeholder for results -->
+      <p class="mt-2 border-2 border-green-500 dark:border-sky-500 border-double"></p>
+      {% if recommendations %}
         <div id="soil-health-results" class="mt-6 p-4 bg-gray-100 rounded-lg dark:bg-gray-700">
             <section class="container mx-auto p-4 bg-white rounded-lg shadow-xl dark:bg-slate-800 border border-gray-300 dark:border-gray-600" id="recommendations">
                 <h1 class="text-green-700 dark:text-green-400 underline decoration-double mb-4 text-center">Soil Health Evaluation</h1>
 
-                {% if recommendations %}
                     {% for crop, metrics in recommendations.items %}
                         <div class="mb-6">
                             <h2 class="text-lg text-center font-bold underline dark:text-white mb-2">{{ crop|capfirst }}</h2>
@@ -281,44 +288,154 @@
                     {% endfor %}
                 {% else %}
                     <p class="dark:text-orange-500">No evaluation results available yet.</p>
-                {% endif %}
             </section>
         </div>
+      {% endif %}
     </section>
-  </main>
-  <!-- Footer -->
-  <footer class="bg-green-700 text-white text-sm md:text-xl p-4 dark:bg-gray-900 dark:text-gray-200 dark:border-b-2 dark:shadow-md dark:border-slate-900 shadow-lg">
-        <div class="text-center mb-2">
-            <a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a>
+</main>
+
+<!-- Enhanced Footer -->
+<footer class="bg-green-700 text-white p-6 md:p-10 dark:bg-gray-900 dark:text-gray-200 shadow-lg">
+    <div class="max-w-7xl mx-auto grid gap-8 md:grid-cols-3 text-center md:text-left">
+        <!-- Contact Us Section -->
+        <div>
+            <h5 class="font-bold text-lg mb-3">Contact Us</h5>
+            <div class="flex flex-col space-y-2">
+                <a href="mailto:agrimax@contact.com" class="flex items-center justify-center md:justify-start hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    agrimax@contact.com
+                </a>
+                <a href="tel:+254700000000" class="flex items-center justify-center md:justify-start hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 10l1.34-.9a2 2 0 012.32 0L7.75 10h8.5l1.09-.9a2 2 0 012.32 0L21 10M5 17h14a2 2 0 002-2v-5a2 2 0 00-2-2H5a2 2 0 00-2 2v5a2 2 0 002 2z" />
+                    </svg>
+                    +254 700 000 000
+                </a>
+            </div>
         </div>
 
-        <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <p id="contact" class="text-center">
-                Contact Us:
-                <a class="hover:text-yellow-400" href="mailto:agrimax@contact.com">📧 agrimax@contact.com</a>
-            </p>
-            <p class="text-center">
-                <a class="hover:text-yellow-400" href="tel:+254700000000">📱+254 700 000 000</a>
-            </p>
+        <!-- Follow Us Section -->
+        <div>
+            <h5 class="font-bold text-lg mb-3">Follow Us</h5>
+            <div class="flex flex-col space-y-2">
+                <a href="#" class="flex items-center justify-center md:justify-start hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82V14.706h-3.415v-3.6h3.415V8.577c0-3.384 2.075-5.221 5.102-5.221 1.449 0 2.694.107 3.057.156v3.548h-2.1c-1.645 0-1.964.781-1.964 1.928v2.524h3.928l-.513 3.6h-3.415V24h6.703C23.407 24 24 23.407 24 22.676V1.325C24 .593 23.407 0 22.675 0z" />
+                    </svg>
+                    Facebook
+                </a>
+                <a href="#" class="flex items-center justify-center md:justify-start hover:text-yellow-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M23.954 4.569c-.885.392-1.83.656-2.825.775a4.933 4.933 0 002.163-2.724c-.95.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.691 8.095 4.066 6.13 1.64 3.161a4.822 4.822 0 00-.666 2.475c0 1.708.869 3.213 2.188 4.096a4.904 4.904 0 01-2.23-.616v.061c0 2.385 1.693 4.374 3.946 4.829a4.935 4.935 0 01-2.224.085c.626 1.956 2.444 3.38 4.6 3.421a9.867 9.867 0 01-6.102 2.105c-.397 0-.79-.023-1.175-.069A13.945 13.945 0 007.548 21c9.142 0 14.307-7.721 14.307-14.426 0-.22-.004-.439-.014-.656a10.243 10.243 0 002.513-2.621z" />
+                    </svg>
+                    Twitter
+                </a>
+            </div>
         </div>
 
-        <p class="text-center">&copy; 2024 AgriMax. All rights reserved.</p>
-    </footer>
+        <!-- Newsletter Section -->
+        <div>
+            <h5 class="font-bold text-lg mb-3">Newsletter</h5>
+            <p class="text-sm mb-3">Subscribe to our newsletter for updates:</p>
+            <form class="flex items-center space-x-2">
+                <input type="email" placeholder="Enter your email" class="flex-1 p-2 rounded border border-gray-300 focus:ring-2 focus:ring-yellow-400">
+                <button type="submit" class="p-2 bg-yellow-400 text-black rounded hover:bg-yellow-500">Subscribe</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-8 text-center text-sm border-t border-gray-600 pt-4">
+        &copy; 2025 AgriMax. All rights reserved.
+    </div>
+</footer>
+
 </div>
-
 <style>
-/* Light theme background */
+
 .bg-light-img {
-    background-image: url('{% static "images/farm-landscape-16_9.jpg" %}');
+    background-image: url("{% static 'images/farm-landscape-16_9.jpg' %}");
     display: flex;
 }
 
 /* Dark theme background */
 .dark\:bg-dark-img:is(.dark *) {
-    background-image: url('{% static "images/farm_dark4.avif" %}');
+    background-image: url("{% static 'images/farm_dark4.avif' %}");
     display: flex;
 }
-
 </style>
+<!--Analytics modal -->
+<!-- Modal Overlay -->
+<div id="AnalyticsModal" class="fixed flex top-0 left-[-100vw] items-center justify-center w-full h-full inset-0 bg-black bg-opacity-50 transform -translate-x-1/2 z-50 opacity-0 pointer-events-none transition-all duration-3000 ease-in-out overflow-y-auto scrollbar-hide hidden">
+
+    <div id="modal-content" class="modal-content w-[98vw] h-[90vh] p-6 rounded-lg shadow-lg bg-white dark:bg-gray-800 transition-transform duration-300 ease-in-out transform translate-y-0 overflow-y-auto scrollbar-hide">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-blue-500 dark:text-blue-400 text-center">Analytics Data</h2>
+            <button title="close Modoal" id="close-modal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <!-- Analytics Figures and Diagrams -->
+        <div class="mb-6 w-full">
+            <h3 class="text-xl font-bold text-green-500 dark:text-green-400 mb-4 text-center">Figures and Diagrams</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md border-2 border-blue-500 dark:border-green-400">
+              {% if analytics %}
+                {% for figure in analytics %}
+                  <img class="border-2 border-blue-600 dark:border-green-600 rounded-md cursor-pointer" src="data:image/png;base64,{{ figure }}" alt="User Growth Chart" class="w-36 h-36 rounded-lg" onclick="goFullscreen(this);">
+                {% endfor %}
+                {% else %}
+                  <p class="text-red-600 dark:text-red-300 text-xl text-center"> No Data Available Untill you request Recommendations</p>
+              {% endif %}
+            </div>
+        </div>
+
+        <!-- Analytics Table -->
+        <div class="hidden">
+            <h3 class="text-xl font-bold text-red-500 dark:text-red-400 mb-4">Data Table</h3>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-blue-500 dark:text-green-400">Date</th>
+                            <th class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-blue-500 dark:text-green-400">User Count</th>
+                            <th class="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-blue-500 dark:text-green-400">Sales Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">2023-10-01</td>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">1000</td>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">$10,000</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">2023-10-02</td>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">1050</td>
+                            <td class="px-4 py-2 text-blue-600 dark:text-green-500">$10,500</td>
+                        </tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function goFullscreen(element) {
+    // Check if the Fullscreen API is available
+    if (element.requestFullscreen) {
+        element.requestFullscreen(); // Standard method
+    } else if (element.mozRequestFullScreen) { // Firefox
+        element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+        element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) { // IE/Edge
+        element.msRequestFullscreen();
+    } else {
+        alert("Fullscreen API is not supported on this browser.");
+    }
+}
+</script>
 </body>
 </html>

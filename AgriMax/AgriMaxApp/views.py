@@ -1,9 +1,6 @@
-# import uuid
-import json
-import os
 from datetime import datetime
-import requests
-from django.conf import settings
+import asyncio
+# from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout  # get_user_model
 from django.contrib.auth.decorators import login_required
@@ -22,6 +19,7 @@ from .forms import (CustomRegistrationForm, FarmDataForm, HealthDataForm,
 from .health import Health
 from .models import CustomUser, Profile
 from .Weather import main
+from .analytics import Draw
 
 # from .forms import CustomRegistrationForm
 
@@ -89,10 +87,17 @@ def get_homePage_rec(request):
 @login_required
 def get_homePage_crop_rec(request):
     crop_rec = request.session.get('crop_rec', {})
+    analytics = request.session.get('analytics', {})
     # Clear the recommendations from the session if you don't need it anymore
     if 'crop_rec' in request.session:
         del request.session['crop_rec']
-    return render(request, "index.html", {'crop_rec': crop_rec})
+    if 'analytics' in request.session:
+        del request.session['analytics']
+
+    elif analytics is None:
+        analytics = 'error: No analytics data available.'
+
+    return render(request, "index.html", {'crop_rec': crop_rec, 'analytics': analytics})
 
 
 @login_required
@@ -254,6 +259,10 @@ def recommend(request):
 
             # Store in session
             request.session['crop_rec'] = crop_rec
+            init = Draw(crop_rec)
+            analytics = asyncio.run(init.fetchAll())
+
+            request.session['analytics'] = analytics
             return redirect(f"{reverse('home_crop_rec')}#crop_rec")
         else:
             return render(request, 'index.html', {'form': form})
@@ -282,6 +291,13 @@ def healthEval(request):
 
             # Store in session
             request.session['recommendations'] = recommendations
+
+            print(recommendations)
+            """init = Draw(recommendations)
+            analytics = asyncio.run(init.fetchAll())
+
+            request.session['analytics'] = analytics"""
+
             return redirect(f"{reverse('home_rec')}#soil-health")
         else:
             return messages.error(request, '<b>Invalid form</b>')

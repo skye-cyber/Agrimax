@@ -1,13 +1,14 @@
 import datetime
-import os
+# import os
 
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-from django.conf import settings
+
+# from django.conf import settings
 
 time = datetime.datetime.now().strftime("%d_%m_%y-%H:%M")
-fig_root = settings.MEDIA_ROOT
+# fig_root = settings.MEDIA_ROOT
 
 
 class Draw:
@@ -25,7 +26,7 @@ class Draw:
         plt.pie(percentages, labels=crops, autopct='%1.1f%%', startangle=140)
         plt.title('Crop Suitability Distribution')
         # plt.show()
-        /home/skye/skye@fieldmanagement/AgriMax/dep_graph.py
+        # plt.savefig(os.path.join(fig_root, f'PieChart_{time}'))
 
     def BarChart(self):
         crops = ['Barley', 'Blackgram', 'Apple',
@@ -39,7 +40,7 @@ class Draw:
         plt.ylabel('Suitability (%)')
         plt.title('Crop Suitability Comparison')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'BarChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'BarChart_{time}'))
 
     def StackedBarChart(self):
         # Data
@@ -54,7 +55,7 @@ class Draw:
         plt.xlabel('Crops')
         plt.ylabel('Suitability (%)')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'StackedBarChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'StackedBarChart_{time}'))
 
     def ParetoChart(self):
         # Data
@@ -79,7 +80,7 @@ class Draw:
 
         plt.title('Pareto Chart of Crop Suitability')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'ParetoChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'ParetoChart_{time}'))
 
     def RadarChart(self):
         # Data
@@ -104,7 +105,7 @@ class Draw:
         ax.set_xticklabels(crops)
         plt.title('Radar Chart of Crop Suitability')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'RadarChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'RadarChart_{time}'))
 
     def CreateHeatmap(self):
         # Data
@@ -118,7 +119,7 @@ class Draw:
                     xticklabels=crops, yticklabels=['Suitability'])
         plt.title('Heatmap of Crop Suitability')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'CreateHeatmap_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'CreateHeatmap_{time}'))
 
     def FunnelChart(self):
         # Data
@@ -134,8 +135,7 @@ class Draw:
         plt.title('Funnel Chart of Crop Suitability')
         plt.gca().invert_yaxis()
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'FunnelChart_{time}'))
-        plt.savefig
+        # plt.savefig(os.path.join(fig_root, f'FunnelChart_{time}'))
 
     def DoughnutChart(self):
         # Data
@@ -149,7 +149,7 @@ class Draw:
                 startangle=140, wedgeprops=dict(width=0.4))
         plt.title('Doughnut Chart of Crop Suitability')
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'DoughnutChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'DoughnutChart_{time}'))
 
     def LineChart(self):
         # Simulated data (e.g., crop suitability over time)
@@ -165,11 +165,11 @@ class Draw:
         plt.title('Trend of Barley Suitability Over Time')
         plt.legend()
         # plt.show()
-        plt.savefig(os.path.join(fig_root, f'LineChart_{time}'))
+        # plt.savefig(os.path.join(fig_root, f'LineChart_{time}'))
 
 
-# init = Draw()
-# init.BarChart()
+init = Draw()
+init.BarChart()
 # init.CreateHeatmap()
 # init.DoughnutChart()
 # init.FunnelChart()
