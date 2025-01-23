@@ -1,12 +1,14 @@
+import configparser
 import json
 import os
+from datetime import datetime
 # import time
 from pathlib import Path
+
 import requests
-from datetime import datetime
+
 # from django.conf import settings
 from .get_coordinates import get_latitude_longitude
-import configparser
 
 # Create a configuration object
 config = configparser.ConfigParser()
@@ -14,25 +16,35 @@ config = configparser.ConfigParser()
 
 class Weather:
     def __init__(self, loc):
-        self.loc = loc
-        cfname = "weather/coordCache.cfg"
-        coord_cache = os.path.join(Path(__file__).parent, cfname)
-        if os.path.exists(coord_cache):
-            config.read(coord_cache)
-            self.lat = config.get(f"{self.loc.lower()}coord", 'lat')
-            self.lon = config.get(f"{self.loc.lower()}coord", 'lon')
-        else:
+        def getCOORD():
             try:
                 self.lat, self.lon = get_latitude_longitude(self.loc)
                 if self.lat and self.lon:
-                    # Add the section with the desired keys and values
-                    config._write_section(f"{self.loc.lower()}coord", {"lat": self.lat, "lon": self.lon})
+                    # Add a new section and set latitude and longitude
+                    section_name = f"{self.loc.lower()}coord"
+                    config[section_name] = {
+                        "lat": str(self.lat),
+                        "lon": str(self.lon),
+                    }
 
-                    # Write the config object to a file
-                    with open(cfname, "w") as config_file:
-                        config.write(config_file)
+                # Write the config object to a file
+                with open(cfname, "a") as config_file:
+                    config.write(config_file)
             except requests.ReadTimeout:
                 print("Coordinates Read Timeout")
+
+        self.loc = loc
+        cfname = "weather/coordCache.cfg"
+        coord_cache = Path(__file__).parent / cfname
+        if os.path.exists(coord_cache):
+            try:
+                config.read(coord_cache)
+                self.lat = config.get(f"{self.loc.lower()}coord", 'lat')
+                self.lon = config.get(f"{self.loc.lower()}coord", 'lon')
+            except configparser.NoSectionError:
+                getCOORD()
+        else:
+            getCOORD()
 
     def get_daily_forecast(self):
         url = f"https://api.open-meteo.com/v1/forecast?latitude={
@@ -74,7 +86,8 @@ class Weather:
             if not os.path.isfile(cache_file):
                 parent_dir = os.path.dirname(cache_file)
                 if not os.access(parent_dir, os.W_OK):  # Check access permission
-                    raise PermissionError(f"Cannot write to the parent directory '{parent_dir}'")
+                    raise PermissionError(
+                        f"Cannot write to the parent directory '{parent_dir}'")
             try:
                 with open(str(cache_file), 'w') as fp:
                     json.dump(data, fp, indent=4)

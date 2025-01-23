@@ -66,7 +66,7 @@
           </div>
       </nav>
 
-          <!-- Farm History Page -->
+      <!-- Farm History Page -->
       <section id="farm-history" class="container mx-auto my-32 p-6 bg-white rounded-lg shadow-md">
           <h2 class="text-3xl font-bold mb-4 text-green-700">Farm History</h2>
 

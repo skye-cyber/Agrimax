@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-66o6loo=mw4ps%3srm804w#_70avz)wmjl4wvz=79jmd$6ly80'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['172.17.88.230', '127.0.0.1', 'e4e6-196-250-210-165.ngrok-free.app', 'c660-196-250-215-185.ngrok-free.app']
+ALLOWED_HOSTS = ['172.17.88.230', '192.168.43.233', '127.0.0.1', 'e4e6-196-250-210-165.ngrok-free.app', 'c660-196-250-215-185.ngrok-free.app']
 
 CSRF_TRUSTED_ORIGINS = [
     'https://8fab-41-209-57-163.ngrok-free.app',
@@ -141,11 +141,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = os.path.join(BASE_DIR, 'static/')
-
 if DEBUG:
     STATIC_URL = os.path.join(BASE_DIR, 'AgriMaxApp/static/')
 
-print(STATIC_URL)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

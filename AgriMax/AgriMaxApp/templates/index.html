@@ -7,7 +7,7 @@
   <title>AgriMax - Cultivating Smarter Farms</title>
   {% load static %}
 
-  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
   <script type="text/javascript" src="{% static 'js/darkmode.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/typewriter.js' %}"></script>
   <script type="text/javascript" src="{% static 'js/helper.js' %}" defer></script>
@@ -32,15 +32,27 @@
                 <button class="flex md:hidden px-4 py-2 mt-2 font-bold rounded-md bg-cyan-500 ml-2 items-center" type="button" id="dropdown-button">
                     Menu
                 </button>
+                <section class="flex justify-between items-center">
+                    <!-- Button on the left -->
+                    {% url 'farmPage' as farm_page_url %}
+                    <button onclick="window.location.href='{{ farm_page_url }}'" class="hidden md:flex px-2 py-2 mt-2 bg-gradient-to-r from-blue-700 vian-sky-400 to-green-800 hover:bg-gradient-to-l hover:from-stone-800 hover:via-sky-500 hover:to-zinc-900 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
+                        <span class="flex items-center">
+                            <svg class="mr-3 h-6 w-6 animate-spin" viewBox="0 0 24 24" stroke="currentcolor" fill="none">
+                                <path d="M12 2 L2 12 L12 22 L22 12 Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            <span class="text-lg font-semibold text-white">New Farm</span>
+                        </span>
+                    </button>
 
-            <!-- Horizontal Menu for Medium and Larger Devices -->
-              <ul id="menu" class="hidden md:flex items-right lg:justify-end space-x-2 mt-1 pt-0 mt-2 overflow-x-wrap">
-                  <li><a href="#crop-recommendation" class="hover:text-yellow-400">Recommendation</a></li>
-                  <li><a href="{% url 'history' %}" class="hover:text-yellow-400">History</a></li>
-                  <li><a href="#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
-                  <li><a href="{% url 'weather' %}" class="hover:text-yellow-400">Weather</a></li>
-                  <li><a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a></li>
-              </ul>
+                    <!-- Horizontal Menu for Medium and Larger Devices on the right -->
+                    <ul id="menu" class="hidden md:flex justify-end items-center space-x-2 mt-1 pt-0 mt-2 overflow-x-wrap">
+                        <li><a href="#crop-recommendation" class="hover:text-yellow-400" target="_blank" title="Crop Recommendation">Recommendation</a></li>
+                        <li><a href="{% url 'history' %}" class="hover:text-yellow-400" target="_blank" title="History">History</a></li>
+                        <li><a href="#soil-health" class="hover:text-yellow-400" target="_blank" title="Soil Health">Soil Health</a></li>
+                        <li><a href="{% url 'weather' %}" class="hover:text-yellow-400" target="_blank" title="Weather">Weather</a></li>
+                        <li><a href="{% url 'logout' %}" class="hover:text-yellow-400" target="_blank" title="Logout">Logout</a></li>
+                    </ul>
+                </section>
               <div class="fixed top-3 right-0 p-2 z-50">
               <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400">
                       <svg id="sun-icon" width="30" height="30" class="w-5 h-5" fill="currentColor" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
@@ -63,10 +75,18 @@
               <div id="dropdown-menu" class="absolute z-50 hidden bg-white dark:bg-gray-800 text-black dark:text-gray-200 border border-gray-300 dark:border-gray-600 mt-2 rounded-md shadow-lg overflow-hidden">
                   <ul class="flex flex-col space-y-2 p-4">
                     <li><a href="#crop-recommendation" class="hover:text-yellow-400">Recommendation</a></li>
-                    <li><a href="{% url 'history' %}" class="hover:text-yellow-400">History</a></li>
+                    <li><a href="{% url 'history' %}" class="hover:text-yellow-400 cursor-not-allowed">History</a></li>
                     <li><a href="#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
                     <li><a href="{% url 'weather' %}" class="hover:text-yellow-400">Weather</a></li>
                     <li><a href="{% url 'logout' %}" class="hover:text-yellow-400">Logout</a></li>
+                    <button onclick="window.location.href='{{ farm_page_url }}'" class="px-4 py-2 justify-start bg-blue-700 hover:bg-blue-800 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out mt-5">
+                    <span class="flex items-center">
+                        <svg class="mr-3 h-6 w-6 animate-spin" viewBox="0 0 24 24" stroke="currentcolor" fill="none">
+                            <path d="M12 2 L2 12L12 22L22 12Z" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        </svg>
+                        <span class="text-lg font-semibold text-white dark:text-green-400 dark:hover:text-blue-400">New Farm</span>
+                    </span>
+                    </button>
                   </ul>
               </div>
         </div>
@@ -145,7 +165,7 @@
 
         {% if crop_rec %}
           <section class="container mx-auto my-2 p-2 bg-white rounded-lg shadow-xl dark:border-slate-600 dark:text-white dark:focus:border-slate-400 dark:bg-slate-800" id="crop_rec">
-              <h1 class="text-green-700 dark:text-green-400 underline decoration-double">Crop Recommendations</h1>
+              <p class="text-lg md:text-3xl font-bold text-green-700 dark:text-green-400 underline decoration-double">Crop Recommendations</p>
 
               <button id="analyticsShow" type="submit" class="p-2 bg-yellow-400 text-black rounded hover:bg-yellow-500 transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg"> View Analytics </button>
               <h2 class="font-bold text-lg">
@@ -247,13 +267,13 @@
               <!-- Placeholder for results -->
       <p class="mt-2 border-2 border-green-500 dark:border-sky-500 border-double"></p>
       {% if recommendations %}
-        <div id="soil-health-results" class="mt-6 p-4 bg-gray-100 rounded-lg dark:bg-gray-700">
-            <section class="container mx-auto p-4 bg-white rounded-lg shadow-xl dark:bg-slate-800 border border-gray-300 dark:border-gray-600" id="recommendations">
-                <h1 class="text-green-700 dark:text-green-400 underline decoration-double mb-4 text-center">Soil Health Evaluation</h1>
+        <div id="soil-health-results" class="mt-6 w-full md:w-auto p-auto md:p-4 bg-gray-100 rounded-lg dark:bg-gray-700">
+            <section class="container mx-auto w-full md:w-auto p-auto md:p-4 bg-white rounded-lg shadow-xl dark:bg-slate-800 border border-gray-300 dark:border-gray-600" id="recommendations">
+                <p class="text-lg md:text-3xl font-bold text-green-700 dark:text-green-400 underline decoration-double mb-4 text-center">Soil Health Evaluation</p>
 
                     {% for crop, metrics in recommendations.items %}
-                        <div class="mb-6">
-                            <h2 class="text-lg text-center font-bold underline dark:text-white mb-2">{{ crop|capfirst }}</h2>
+                        <div class="mb-2 md:mb-6">
+                            <h2 class="text-lg text-center font-bold underline dark:text-white mb-2">Crop: {{ crop|capfirst }}</h2>
 
                             <div class="overflow-x-auto rounded-lg dark:shadow-black hover:shadow-xl mx-auto dark:border-x-fuchsia-600 dark:border-x-2 dark:border-x-opacity-30 border-rounded-lg dark:border-b-4 dark:border-b-pink-400">
                                 <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md border-collapse">

@@ -80,10 +80,10 @@ class Health:
                     'Potassium': potassium_score,
                     'pH': ph_score,
                     'Comments': {
-                        'Nitrogen': f"Excellent Nitrogen levels (N={N})" if nitrogen_score == 100 else f"Low Nitrogen levels. Consider adding more nitrogen (ideal={req['N']}, current={N})",
-                        'Phosphorus': f"Excellent Phosphorus levels (P={P})" if phosphorus_score == 100 else f"Low Phosphorus levels. Consider adding more phosphorus (ideal={req['P']}, current={P})",
-                        'Potassium': f"Excellent Potassium levels (K={K})" if potassium_score == 100 else f"Low Potassium levels. Consider adding more potassium (ideal={req['K']}, current={K})",
-                        'pH': f"Excellent pH levels (pH={pH})" if ph_score == 100 else f"Non-ideal pH levels. Adjust pH closer to ideal (ideal={req['pH']}, current={pH})"
+                        'Nitrogen': f"Excellent Nitrogen levels (N={N})" if nitrogen_score == 100 else f"Low Nitrogen levels. Consider adding more (ideal={req['N']}, current={N})",
+                        'Phosphorus': f"Excellent Phosphorus levels (P={P})" if phosphorus_score == 100 else f"Low Phosphorus levels. Consider adding more (ideal={req['P']}, current={P})",
+                        'Potassium': f"Excellent Potassium levels (K={K})" if potassium_score == 100 else f"Low Potassium levels. Consider adding more (ideal={req['K']}, current={K})",
+                        'pH': f"Excellent pH levels (pH={pH})" if ph_score == 100 else f"pH levels not ideal. (ideal={req['pH']}, current={pH})"
                     }
                 }
             else:

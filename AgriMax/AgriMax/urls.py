@@ -32,9 +32,11 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('verify-email/<uuid:token>/', views.verify_email, name='verify_email'),
     path('gethistory/', views.get_historyPage, name='history'),
-    path('getweather/', views.get_weatherPage, name='weather'),
+    path('getweather/', views.get_weather_page, name='weather'),
     path('recommend/', views.recommend, name='recommend'),
     path('health/', views.healthEval, name="health"),
+    path('farm&information/', views.FarminfoHandler, name="farminformation"),
+    path('getFarmPage/', views.getFarmPage, name="farmPage"),
 ]
 
 

@@ -1,28 +1,25 @@
-# Register your models here.
+# admin.py
+
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from django.contrib.auth.models import Group
 
-from .models import CustomUser
-
+from .forms import FarmInformationForm
+from .models import CustomUser, FarmInformation
 
 # Custom User Admin
-class CustormUserAdmin(BaseUserAdmin):
-    list_display = ('username', 'email', 'first_name',
-                    'is_staff')
+
+
+class CustomUserAdmin(BaseUserAdmin):
+    list_display = ('username', 'email', 'first_name', 'is_staff')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('username', 'email')
     ordering = ('username',)
     readonly_fields = ('date_joined', 'last_login')
     filter_horizontal = ('groups', 'user_permissions',)
 
-    filter_horizontal = ()
-    list_filter = ()
-    fieldsets = ()
-
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('email')}),
+        ('Personal info', {'fields': ('email', 'first_name', 'last_name')}),
         ('Permissions', {'fields': ('is_active', 'is_staff',
          'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
@@ -31,11 +28,37 @@ class CustormUserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email')}
+            'fields': ('username', 'email', 'password1', 'password2')}
          ),
     )
 
+# FarmInformation Admin
 
-admin.site.register(CustomUser)
-# Optionally unregister the Group model if you're not using it
-# admin.site.unregister(Group)
+
+class FarmInformationAdmin(admin.ModelAdmin):
+    form = FarmInformationForm
+    # Use a method to display user name
+    list_display = ('farm_name', 'farm_location', 'user_name')
+    list_filter = ('user__username',)  # Filter by user's username
+    search_fields = ('farm_name', 'farm_location', 'user__username')
+    ordering = ('farm_name',)
+    fieldsets = (
+        (None, {'fields': ('user', 'farm_name', 'farm_location')}),
+    )
+
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('user', 'farm_name', 'farm_location')}
+         ),
+    )
+
+    def user_name(self, obj):
+        return obj.user.username
+    user_name.admin_order_field = 'user__username'  # Allows column order sorting
+    user_name.short_description = 'User'  # Renames column head
+
+
+# Register your models here
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(FarmInformation, FarmInformationAdmin)

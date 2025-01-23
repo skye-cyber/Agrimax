@@ -29,6 +29,14 @@ class CustomUser(AbstractUser):
         return self.username
 
 
+class FarmInformation(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='farms', default=1)
+    farm_name = models.CharField(max_length=255)
+    farm_location = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.farm_name
+
 # accounts/models.py
 
 

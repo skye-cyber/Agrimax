@@ -27,14 +27,16 @@ urlpatterns = [
     path('gethome/', views.get_homePage, name='home'),
     path('home_h_rec/', views.get_homePage_rec, name='home_rec'),  # home with recommendation
     path('getsignup/', views.get_signupPage, name='getsignup'),
-    path('home_crop_rec/', views.get_homePage_crec, name='home_crop_rec'),
+    path('home_crop_rec/', views.get_homePage_crop_rec, name='home_crop_rec'),
     path('usersignup/', views.signup, name='usersignup'),
     path('logout/', views.user_logout, name='logout'),
     path('verify-email/<uuid:token>/', views.verify_email, name='verify_email'),
     path('gethistory/', views.get_historyPage, name='history'),
-    path('getweather/', views.get_weatherPage, name='weather'),
+    path('getweather/', views.get_weather_page, name='weather'),
     path('recommend/', views.recommend, name='recommend'),
     path('health/', views.healthEval, name="health"),
+    path('farm&information/', views.FarminfoHandler, name="farminformation"),
+    path('getfarm/', views.getFarmPage, name="farmPage"),
 ]
 
 

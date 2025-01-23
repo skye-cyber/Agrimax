@@ -2,7 +2,7 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    './AgriMaxApp/templates/index.html',
+    './AgriMaxApp/templates/*.html',
     './AgriMaxApp/static/js/*.js'
 
   ],

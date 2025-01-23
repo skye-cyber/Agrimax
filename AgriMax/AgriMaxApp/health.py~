@@ -33,7 +33,7 @@ crop_requirements = {
     'cucumber': {'pH': (6.0, 7.0), 'N': (80, 120), 'P': (40, 70), 'K': (60, 90)},
     'chickpea': {'pH': (6.0, 7.0), 'N': (40, 80), 'P': (20, 40), 'K': (30, 50)},
     'blackgram': {'pH': (6.0, 7.0), 'N': (40, 80), 'P': (20, 40), 'K': (30, 50)},
-    'pomegranate': {'pH': (6.0, 7.5), 'N': (60, 100), 'P': (40, 70), 'K': (60, 9)},
+    'pomegranate': {'pH': (6.0, 7.5), 'N': (60, 100), 'P': (40, 70), 'K': (60, 90)},
     'grapes': {'pH': (6.0, 7.5), 'N': (50, 100), 'P': (30, 60), 'K': (60, 100)},
     'watermelon': {'pH': (6.0, 7.0), 'N': (80, 120), 'P': (40, 70), 'K': (60, 90)},
     'apple': {'pH': (6.0, 7.0), 'N': (80, 120), 'P': (40, 70), 'K': (60, 90)},
@@ -80,10 +80,10 @@ class Health:
                     'Potassium': potassium_score,
                     'pH': ph_score,
                     'Comments': {
-                        'Nitrogen': f"Excellent Nitrogen levels (N={N})" if nitrogen_score == 100 else f"Low Nitrogen levels. Consider adding more nitrogen (ideal={req['N']}, current={N})",
-                        'Phosphorus': f"Excellent Phosphorus levels (P={P})" if phosphorus_score == 100 else f"Low Phosphorus levels. Consider adding more phosphorus (ideal={req['P']}, current={P})",
-                        'Potassium': f"Excellent Potassium levels (K={K})" if potassium_score == 100 else f"Low Potassium levels. Consider adding more potassium (ideal={req['K']}, current={K})",
-                        'pH': f"Excellent pH levels (pH={pH})" if ph_score == 100 else f"Non-ideal pH levels. Adjust pH closer to ideal (ideal={req['pH']}, current={pH})"
+                        'Nitrogen': f"Excellent Nitrogen levels (N={N})" if nitrogen_score == 100 else f"Low Nitrogen levels. Consider adding more (ideal={req['N']}, current={N})",
+                        'Phosphorus': f"Excellent Phosphorus levels (P={P})" if phosphorus_score == 100 else f"Low Phosphorus levels. Consider adding more (ideal={req['P']}, current={P})",
+                        'Potassium': f"Excellent Potassium levels (K={K})" if potassium_score == 100 else f"Low Potassium levels. Consider adding more (ideal={req['K']}, current={K})",
+                        'pH': f"Excellent pH levels (pH={pH})" if ph_score == 100 else f"pH levels not ideal. ideal (ideal={req['pH']}, current={pH})"
                     }
                 }
             else:

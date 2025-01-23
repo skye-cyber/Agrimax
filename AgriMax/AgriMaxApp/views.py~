@@ -1,5 +1,6 @@
-from datetime import datetime
 import asyncio
+from datetime import datetime
+from django.db.models import QuerySet
 # from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout  # get_user_model
@@ -10,16 +11,16 @@ from django.contrib.auth.forms import AuthenticationForm  # , UserCreationForm
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect,
                          JsonResponse, StreamingHttpResponse)
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django_ratelimit.decorators import ratelimit
 
-from .forms import (CustomRegistrationForm, FarmDataForm, HealthDataForm,
-                    LocationForm)
-from .health import Health
-from .models import CustomUser, Profile
-from .Weather import main
 from .analytics import Draw
+from .forms import (CustomRegistrationForm, FarmDataForm, FarmInformationForm,
+                    HealthDataForm)
+from .health import Health
+from .models import CustomUser, FarmInformation, Profile
+from .Weather import main
 
 # from .forms import CustomRegistrationForm
 
@@ -34,41 +35,108 @@ def get_signupPage(request):
     return render(request, "signup.html")
 
 
-def get_weatherPage(request):
-    loc = 'Embu'
-    data7 = main(loc)
+def getFarmPage(request):
+    return redirect("farminformation")
 
-    data = main(loc, _type='hourly3')
 
-    if (isinstance(data, str) and data in ("RequestFailure", "ConnectionError")) or (isinstance(data7, str) and data7 in ("RequestFailure", "ConnectionError")):
-        return render(request, 'error.html', {'error_message': data if isinstance(data, str) else data7}, status=404)
+def GetFarmDetail(request, names=False, locations=False):
+    """
+    Fetch farm details for the currently logged-in user.
+    If no flags (names or locations) are provided, return all data in dictionary form.
+    """
+    if not request.user.is_authenticated:
+        return None  # Return None if the user is not authenticated
 
-    # Extract relevant weather information
-    context = {
-        "location": data.get("name"),
-        "country": data["sys"].get("country"),
-        # Convert from Kelvin to Celsius
-        "temperature": data["main"].get("temp") - 273.15,
-        "icon": data["weather"][0].get("icon"),
-        # Convert from Kelvin to Celsius
-        "visibility": data['visibility'],
-        "feels_like": data["main"].get("feels_like") - 273.15,
-        "humidity": data["main"].get("humidity"),
-        "pressure": data["main"].get("pressure"),
-        "wind_speed": data["wind"].get("speed"),
-        "wind_direction": data["wind"].get("deg"),
-        "weather_main": data["weather"][0].get("main"),
-        "weather_description": data["weather"][0].get("description"),
-        # Default to 0 if no rain data
-        "rain_last_hour": data.get("rain", {}).get("1h", 0),
-        "cloud_cover": data["clouds"].get("all"),
-        "sunrise": datetime.fromtimestamp(data["sys"].get("sunrise")).strftime("%H:%M:%S"),  # Convert epotch time to readable time
-        "sunset": datetime.fromtimestamp(data["sys"].get("sunset")).strftime("%H:%M:%S"),
-    }
+    farms = FarmInformation.objects.filter(user=request.user)  # Filter farms for the current user
 
-    return render(request, 'weather.html', {'hourly3': context, 'weekly': data7})
-    '''else:
-        return render(request, 'weather.html')  '''
+    if not farms:
+        return None  # Return None if no farms are found
+
+    if not names and not locations:
+        # Return all data in dictionary form
+        all_data = [farm.__dict__ for farm in farms]
+        for farm_data in all_data:
+            farm_data.pop('_state', None)  # Remove the _state attribute if it exists
+        return all_data
+
+    if locations:
+        if isinstance(farms, QuerySet):
+            locations = list(farms.values_list('farm_location', flat=True))
+        else:
+            locations = [data.farm_location for data in farms]
+    else:
+        if isinstance(farms, QuerySet):
+            locations = list(farms.values_list('farm_name', flat=True))
+        else:
+            locations = [data.farm_name for data in farms]
+
+    # print(locations)
+    return locations
+
+
+def get_weather_page(request):
+    # Get all locations from the database or source
+    # Ensure this function returns a list of locations
+    locations = GetFarmDetail(request, locations=True)
+    farmNames = GetFarmDetail(request, names=True)
+    weather_data_list = []
+    error_locations = []
+
+    # Fetch weather data for each location
+    if locations:
+        for loc, farmName in zip(locations, farmNames):
+            try:
+                # Retrieve weather data for the current location
+                weekly_data = main(loc)
+                hourly_data = main(loc, _type='hourly3')
+                # Check for API errors
+                if isinstance(weekly_data, str) and weekly_data in ("RequestFailure", "ConnectionError"):
+                    error_locations.append({"location": loc, "error": weekly_data})
+                    continue
+                if isinstance(hourly_data, str) and hourly_data in ("RequestFailure", "ConnectionError"):
+                    error_locations.append({"location": loc, "error": hourly_data})
+                    continue
+
+                # Process and format weather data
+                weather_data = {
+                    "farmName": farmName,
+                    "location": hourly_data.get("name"),
+                    "country": hourly_data["sys"].get("country"),
+                    # Convert to Celsius
+                    "temperature": hourly_data["main"].get("temp") - 273.15,
+                    "icon": hourly_data["weather"][0].get("icon"),
+                    "visibility": hourly_data["visibility"],
+                    "feels_like": hourly_data["main"].get("feels_like") - 273.15,
+                    "humidity": hourly_data["main"].get("humidity"),
+                    "pressure": hourly_data["main"].get("pressure"),
+                    "wind_speed": hourly_data["wind"].get("speed"),
+                    "wind_direction": hourly_data["wind"].get("deg"),
+                    "weather_main": hourly_data["weather"][0].get("main"),
+                    "weather_description": hourly_data["weather"][0].get("description"),
+                    "rain_last_hour": hourly_data.get("rain", {}).get("1h", 0),
+                    "cloud_cover": hourly_data["clouds"].get("all"),
+                    "sunrise": datetime.fromtimestamp(hourly_data["sys"].get("sunrise")).strftime("%H:%M:%S"),
+                    "sunset": datetime.fromtimestamp(hourly_data["sys"].get("sunset")).strftime("%H:%M:%S"),
+                    "weekly": weekly_data,  # Weekly forecast data
+                }
+
+                # Append processed data to the list
+                weather_data_list.append(weather_data)
+
+            except Exception as e:
+                # Log errors for debugging
+                raise
+                error_locations.append({"location": loc, "error": str(e)})
+
+        # Render the data in the template
+        context = {
+            "weather_data_list": weather_data_list
+        }
+        if error_locations and weather_data_list == []:
+            return render(request, 'error.html', {"error_message": error_locations}, status=404)
+        return render(request, 'weather.html', context)
+    else:
+        return render(request, 'error.html', {'error_message': 'Could not obtain Forecast: -> No Farm Locations set!'}, status=404)
 
 
 def get_historyPage(request):
@@ -143,9 +211,6 @@ def user_login(request):
             # User exists
             else:
                 messages.error(request, 'Incorrect login credentials')
-                # Using <script> tags directly in messages is not a good practice and can introduce security vulnerabilities, such as cross-site scripting (XSS) attacks.
-                # HttpResponse('<script>alert("Incorrect credentials")</script>')
-
         else:
             messages.error(request, 'Invalid username or password.')
 
@@ -159,55 +224,18 @@ def user_login(request):
 # Signup/Register View
 def signup(request):
     if request.method == 'POST':
-        form = CustomRegistrationForm(request.POST)
-
+        form = CustomRegistrationForm(request.POST)  # Bind form with POST data
         if form.is_valid():
-
             user = form.save()
-
-            '''# Create a Profile instance for the new user
-            profile = Profile.objects.get(user=user)
-
-            # Generate a unique token
-            token = str(uuid.uuid4())
-            profile.verification_token = token  # Assuming you have a Profile model
-            profile.save()
-
-            # Send verification email
-            verification_link = request.build_absolute_uri(
-                f'/verify-email/{token}/'
-            )
-            send_mail(
-                'Verify your email',
-                f'Click the link to verify your email: {verification_link}',
-                'swskye17@gmail.com',  # From email
-                [user.email],  # To email
-                fail_silently=False,
-            )
-            messages.success(
-                request, 'Registration successful! Please check your email to verify your account.')
-
-            # login(request, user)
-            # Send a welcome email
-            send_mail(
-                'Welcome to Agrimax',
-                'Thank you for registering!',
-                'swskye17@gmail.com',  # From email
-                [user.email],  # To email
-                fail_silently=False,
-            )'''
             login(request, user)
             username = form.cleaned_data.get('username')
             messages.success(request, f'Account created for {username}!')
-            return redirect('home')  # Redirect to the login page
-
+            return redirect('farminformation')  # Redirect to the Farm Information form
         else:
-            messages.error(request, form.errors)
-
+            # Pass errors back to the template
+            messages.error(request, 'There were errors in your form.')
     else:
-        # print(form.errors)
         form = CustomRegistrationForm()
-        messages.error(request, 'Bad request')
     return render(request, 'signup.html', {'form': form})
 
 
@@ -226,6 +254,23 @@ def verify_email(request, token):
     except Profile.DoesNotExist:
         messages.error(request, 'Invalid verification link.')
         return redirect('login')
+
+
+# Farm Information View
+def FarminfoHandler(request):
+    if request.method == 'POST':
+        form = FarmInformationForm(request.POST)
+        if form.is_valid():
+            farm_info = form.save(commit=False)
+            farm_info.user = request.user  # Automatically set the user field
+            farm_info.save()
+            return redirect('home')
+        else:
+            messages.error(request, 'There were errors in your form.')
+    else:
+        form = FarmInformationForm()
+
+    return render(request, 'farm-details.html', {'form': form})
 
 
 @login_required
@@ -292,7 +337,7 @@ def healthEval(request):
             # Store in session
             request.session['recommendations'] = recommendations
 
-            print(reco)
+            print(recommendations)
             """init = Draw(recommendations)
             analytics = asyncio.run(init.fetchAll())
 

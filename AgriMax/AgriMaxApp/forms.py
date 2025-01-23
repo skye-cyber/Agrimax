@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 
-from .models import CustomUser
+from .models import CustomUser, FarmInformation
 
 
 class CustomRegistrationForm(UserCreationForm):
@@ -20,6 +20,22 @@ class CustomRegistrationForm(UserCreationForm):
         if CustomUser.objects.filter(email=email).exists():
             raise ValidationError("Email is already in use.")
         return email
+
+
+class FarmInformationForm(forms.ModelForm):
+    class Meta:
+        model = FarmInformation
+        fields = ['farm_name', 'farm_location']  # Remove 'user' from fields
+        widgets = {
+            'farm_name': forms.TextInput(attrs={
+                'class': 'appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out transform hover:-translate-y-1',
+                'placeholder': 'Enter the name of your farm',
+            }),
+            'farm_location': forms.TextInput(attrs={
+                'class': 'appearance-none block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-300 ease-in-out transform hover:-translate-y-1',
+                'placeholder': 'Enter the location of your farm',
+            }),
+        }
 
 
 class LoginForm(forms.Form):
