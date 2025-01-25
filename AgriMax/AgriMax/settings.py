@@ -93,18 +93,6 @@ DATABASES = {
     }
 }
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': BASE_DIR / 'db.mysql',
-        'USER': 'skye'
-        'PASSWORD': 'admin'
-        'HOST': 'localhost'
-        'PORT': 3306
-    }
-}
-"""
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -156,14 +144,6 @@ if DEBUG:
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Email options
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "swskye17@gmail.com"
-EMAIL_HOST_PASSWORD = "swskye@dragon17"
 
 LOGIN_URL = "login"
 
