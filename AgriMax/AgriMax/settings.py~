@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 import os
 from pathlib import Path
+import platform
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,21 +135,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = os.path.join(BASE_DIR, "static/")
+STATIC_URL = (
+    os.path.join(BASE_DIR, "static\\")
+    if platform.system() == "windows"
+    else os.path.join(BASE_DIR, "static/")
+)
 
 if DEBUG:
-    STATIC_URL = os.path.join(BASE_DIR, "AgriMaxApp/static/")
+    STATIC_URL = (
+        os.path.join(BASE_DIR, "AgriMaxApp\\static\\")
+        if platform.system() == "windows"
+        else os.path.join(BASE_DIR, "AgriMaxApp/static/")
+    )
 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 LOGIN_URL = "login"
 
 LOGOUT_URL = "logout"
 # Media files settings
-MEDIA_URL = "/media/"
+MEDIA_URL = "\\media\\" if platform.system() == "windows" else "/media/"
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 

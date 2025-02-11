@@ -2,6 +2,8 @@ import configparser
 import json
 import os
 from datetime import datetime
+import platform
+
 # import time
 from pathlib import Path
 
@@ -27,20 +29,33 @@ class Weather:
                         "lon": str(self.lon),
                     }
 
-                # Write the config object to a file
+                directory = os.path.dirname(cfname)
+                if not os.path.exists(directory):
+                    os.makedirs(directory)
+
+                if not os.path.exists(cfname):
+                    open(cfname, "a").close()
+
+                # ...
+
                 with open(cfname, "a") as config_file:
                     config.write(config_file)
+
             except requests.ReadTimeout:
                 print("Coordinates Read Timeout")
 
         self.loc = loc
-        cfname = "weather/coordCache.cfg"
+        cfname = (
+            "weather\\coordCache.cfg"
+            if platform.system().lower() == "windows"
+            else "weather/coordCache.cfg"
+        )
         coord_cache = Path(__file__).parent / cfname
         if os.path.exists(coord_cache):
             try:
                 config.read(coord_cache)
-                self.lat = config.get(f"{self.loc.lower()}coord", 'lat')
-                self.lon = config.get(f"{self.loc.lower()}coord", 'lon')
+                self.lat = config.get(f"{self.loc.lower()}coord", "lat")
+                self.lon = config.get(f"{self.loc.lower()}coord", "lon")
             except configparser.NoSectionError:
                 getCOORD()
         else:
@@ -60,14 +75,13 @@ class Weather:
 
         if response.status_code == 200:
             data = response.json()
-            with open("test.json", 'w'):
+            with open("test.json", "w"):
                 json.dump(data, indent=4)
-            return data['current_weather']
+            return data["current_weather"]
         else:
             return None
 
     def get_weekly_forecast(self, cache_file):
-
         url = f"https://api.open-meteo.com/v1/forecast?latitude={self.lat}&longitude={
             self.lon}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode,sunrise,sunset&timezone=auto"
 
@@ -87,9 +101,10 @@ class Weather:
                 parent_dir = os.path.dirname(cache_file)
                 if not os.access(parent_dir, os.W_OK):  # Check access permission
                     raise PermissionError(
-                        f"Cannot write to the parent directory '{parent_dir}'")
+                        f"Cannot write to the parent directory '{parent_dir}'"
+                    )
             try:
-                with open(str(cache_file), 'w') as fp:
+                with open(str(cache_file), "w") as fp:
                     json.dump(data, fp, indent=4)
             except Exception as e:
                 print(f"Error saving to cache file '{cache_file}'. {e}")
@@ -128,12 +143,12 @@ class Weather:
         return weather_codes.get(weather_code, "Unknown weather code")
 
     def _3hrs_forecast(self, path):
-        api_key = 'd1fce76f166b700e091ab7848af756db'
+        api_key = "d1fce76f166b700e091ab7848af756db"
 
         # weather_root = settings.MEDIA_ROOT
 
-        url = f'https://api.openweathermap.org/data/2.5/weather?lat={
-            self.lat}&lon={self.lon}&appid={api_key}'
+        url = f"https://api.openweathermap.org/data/2.5/weather?lat={
+            self.lat}&lon={self.lon}&appid={api_key}"
 
         try:
             response = requests.get(url, timeout=None)
@@ -148,7 +163,7 @@ class Weather:
 
             # json_file = os.path.join(weather_root, filename)
 
-            with open(path, 'w') as json_file:
+            with open(path, "w") as json_file:
                 json.dump(weather_data, json_file, indent=4)
 
             print(f"Data saved to {path}")
@@ -158,14 +173,14 @@ class Weather:
             return None
 
 
-def main(loc, _type: str = 'daily7', max_attempts: bool = 5):
+def main(loc, _type: str = "daily7", max_attempts: bool = 5):
     date = datetime.now().strftime("%Y-%m-%d")
-    if _type == 'daily7':
+    if _type == "daily7":
         filename = f"weather/weekly_{loc.lower()}_{date}.json"
         cache_file = os.path.join(Path(__file__).parent, filename)
         if os.path.exists(cache_file):
             print(f"Loading data from daily7 file {cache_file}")
-            with open(cache_file, 'r') as file:
+            with open(cache_file, "r") as file:
                 return json.load(file)
 
         else:
@@ -177,7 +192,7 @@ def main(loc, _type: str = 'daily7', max_attempts: bool = 5):
         cache_file = os.path.join(Path(__file__).parent, filename)
         if os.path.exists(cache_file):
             print(f"Loading data from horly3 file {cache_file}")
-            with open(cache_file, 'r') as json_file:
+            with open(cache_file, "r") as json_file:
                 return json.load(json_file)
         else:
             init = Weather(loc)
@@ -198,12 +213,12 @@ if __name__ == "__main__":
     if response.status_code == 200:
         data = response.json()
         print(data)
-        print("*"*100)
-        with open("test.json", 'w') as fl:
+        print("*" * 100)
+        with open("test.json", "w") as fl:
             json.dump(data, fl, indent=4)
-        print(data['current_weather'])
+        print(data["current_weather"])
 
-    '''forecast = main("Nairobi")
+    """forecast = main("Nairobi")
     forecast = forecast['daily']
     if forecast:
         for day in forecast['time']:
@@ -218,4 +233,4 @@ if __name__ == "__main__":
             print(f"Sunset: {forecast['sunset'][index]}")
             print("-" * 30)
     else:
-        print("Failed to retrieve weather data.")'''
+        print("Failed to retrieve weather data.")"""

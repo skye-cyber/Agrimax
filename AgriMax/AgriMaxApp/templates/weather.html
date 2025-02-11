@@ -1,192 +1,484 @@
 {% load custom_filters %}
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Weather Forecast</title>
-  {% load static %}
-  <link href="{% static 'css/weathermain.css' %}" rel="stylesheet">
-  <script src="{% static 'js/darkmode.js' %}"></script>
-</head>
-<body class="bg-green-50 font-serif dark:bg-slate-600 select-none cursor-default">
-
-  <!-- Navigation Menu -->
-  <nav class="bg-green-700 p-4 overflow-x-hidden fixed top-0 w-full z-50 dark:bg-slate-900 dark:border-b-2 dark:border-gray-100">
-    <ul class="flex justify-around mr-10 space-x-1 lg:space-x-2 xl:space-x-2 items-right lg:justify-end xl:justify-end text-white font-semibold">
-      <li><a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a></li>
-      <li><a href="{% url 'home' %}#soil-health" class="hover:text-yellow-400">Soil Health</a></li>
-      <li><a href="{% url 'history' %}" class="hover:text-yellow-400 cursor-not-allowed">Farm History</a></li>
-      <li><a href="{% url 'home' %}#contact" class="hover:text-yellow-400">Contact</a></li>
-    </ul>
-    <div class="fixed top-2 right-0 p-2 z-50">
-          <button id="theme-toggle" aria-label="Toggle Dark Mode" class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400 text-white">
-                  <svg id="sun-icon" width="30" height="30" class="w-5 h-5" fill="currentColor" viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg">
-                      <circle cx="15" cy="15" r="6" fill="currentColor" />
-                      <line x1="15" y1="1" x2="15" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="15" y1="26" x2="15" y2="29" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="1" y1="15" x2="4" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="26" y1="15" x2="29" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="5.5" y1="5.5" x2="8.5" y2="8.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="21.5" y1="21.5" x2="24.5" y2="24.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="5.5" y1="24.5" x2="8.5" y2="21.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                      <line x1="21.5" y1="8.5" x2="24.5" y2="5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                  <svg id="moon-icon" width="30" height="30" viewBox="0 0 24 24" class="w-5 h-5 hidden" aria-hidden="true">
-                      <path fill="currentColor" d="M12 2a10 10 0 1 0 10 10 8.13 8.13 0 0 1-10-10z"/>
-                  </svg>
-            </button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Forecast</title>
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <script src="{% static 'js/darkmode.js' %}"></script>
+  </head>
+  <body
+    class="bg-green-50 font-serif dark:bg-slate-600 select-none cursor-default"
+  >
+    <!-- Navigation Menu -->
+    <nav
+      class="bg-green-700 p-4 overflow-x-hidden fixed top-0 w-full z-50 dark:bg-slate-900 dark:border-b-2 dark:border-gray-100"
+    >
+      <ul
+        class="flex justify-around mr-10 space-x-1 lg:space-x-2 xl:space-x-2 items-right lg:justify-end xl:justify-end text-white font-semibold"
+      >
+        <li>
+          <a href="{% url 'home' %}" class="hover:text-yellow-400">Home</a>
+        </li>
+        <li>
+          <a href="{% url 'home' %}#soil-health" class="hover:text-yellow-400"
+            >Soil Health</a
+          >
+        </li>
+        <li>
+          <a
+            href="{% url 'history' %}"
+            class="hover:text-yellow-400 cursor-not-allowed"
+            >Farm History</a
+          >
+        </li>
+        <li>
+          <a href="{% url 'home' %}#contact" class="hover:text-yellow-400"
+            >Contact</a
+          >
+        </li>
+      </ul>
+      <div class="fixed top-2 right-0 p-2 z-50">
+        <button
+          id="theme-toggle"
+          aria-label="Toggle Dark Mode"
+          class="hover:text-yellow-400 transition-colors duration-300 rounded-full p-2 focus:outline-none bg-cyan-400 text-white"
+        >
+          <svg
+            id="sun-icon"
+            width="30"
+            height="30"
+            class="w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 30 30"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="15" cy="15" r="6" fill="currentColor" />
+            <line
+              x1="15"
+              y1="1"
+              x2="15"
+              y2="4"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="15"
+              y1="26"
+              x2="15"
+              y2="29"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="1"
+              y1="15"
+              x2="4"
+              y2="15"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="26"
+              y1="15"
+              x2="29"
+              y2="15"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="5.5"
+              y1="5.5"
+              x2="8.5"
+              y2="8.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="21.5"
+              y1="21.5"
+              x2="24.5"
+              y2="24.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="5.5"
+              y1="24.5"
+              x2="8.5"
+              y2="21.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+            <line
+              x1="21.5"
+              y1="8.5"
+              x2="24.5"
+              y2="5.5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+          <svg
+            id="moon-icon"
+            width="30"
+            height="30"
+            viewBox="0 0 24 24"
+            class="w-5 h-5 hidden"
+            aria-hidden="true"
+          >
+            <path
+              fill="currentColor"
+              d="M12 2a10 10 0 1 0 10 10 8.13 8.13 0 0 1-10-10z"
+            />
+          </svg>
+        </button>
+      </div>
+    </nav>
+    {% block content %}
+    <!-- Floating Weather Alert -->
+    <div
+      id="weatherAlert"
+      class="hidden opacity-0 transition-opacity duration-1000 ease-in-out visible opacity-1 bg-yellow-100 text-yellow-800 mt-8 p-4 rounded-lg shadow-lg"
+    >
+      <p>
+        <strong>Alert:</strong> A significant drop in temperature is expected
+        tomorrow. Protect young crops!
+      </p>
     </div>
-  </nav>
-{% block content %}
-  <!-- Floating Weather Alert -->
-  <div id="weatherAlert" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out visible opacity-1 bg-yellow-100 text-yellow-800 mt-8 p-4 rounded-lg shadow-lg">
-    <p><strong>Alert:</strong> A significant drop in temperature is expected tomorrow. Protect young crops!</p>
-  </div>
 
-  <!-- Weather Page Container -->
-  <div class="container mx-auto px-4 py-4 mb-8 mt-16 bg-white shadow-lg rounded-lg dark:bg-slate-800">
-    <!-- Page Title -->
-    <h1 class="text-2xl p-auto my-2 md:text-3xl lg:text-4xl xl:text-4xl font-extrabold text-green-700 text-center dark:text-green-500">Weather Forecast</h1>
+    <!-- Weather Page Container -->
+    <div
+      class="container mx-auto px-4 py-4 mb-8 mt-16 bg-white shadow-lg rounded-lg dark:bg-slate-800"
+    >
+      <!-- Page Title -->
+      <h1
+        class="text-2xl p-auto my-2 md:text-3xl lg:text-4xl xl:text-4xl font-extrabold text-green-700 text-center dark:text-green-500"
+      >
+        Weather Forecast
+      </h1>
 
-    <!-- Forecast and Weather Conditions -->
-    <div id="button-container" class="flex justify-center mb-4 overflow-x-hidden">
-      <button id="dailyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold rounded-l-lg hover:bg-green-500 transition">Daily</button>
-      <button id="hourlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition">Hourly</button>
-      <button id="monthlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed" disabled>Monthly</button>
-      <button id="yearlyToggle" class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed rounded-r-md" disabled>Yearly</button>
-    </div>
+      <!-- Forecast and Weather Conditions -->
+      <div
+        id="button-container"
+        class="flex justify-center mb-4 overflow-x-hidden"
+      >
+        <button
+          id="dailyToggle"
+          class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold rounded-l-lg hover:bg-green-500 transition"
+        >
+          Daily
+        </button>
+        <button
+          id="hourlyToggle"
+          class="btn px-2 md:px-3 lg:px-5 py-2 bg-green-600 text-white font-bold hover:bg-green-500 transition"
+        >
+          Hourly
+        </button>
+        <button
+          id="monthlyToggle"
+          class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed"
+          disabled
+        >
+          Monthly
+        </button>
+        <button
+          id="yearlyToggle"
+          class="btn px-2 md:px-3 lg:px-5 py-2 text-slate-900 dark:text-white font-bold bg-gray-400 dark:bg-green-800 opacity-50 cursor-not-allowed rounded-r-md"
+          disabled
+        >
+          Yearly
+        </button>
+      </div>
 
-    <!-- Dynamic Farm Data Display -->
-    {% for weather_data in weather_data_list %}
+      <!-- Dynamic Farm Data Display -->
+      {% for weather_data in weather_data_list %}
       <!-- Location Section -->
       <section class="mt-6">
         <div class="text-center">
-          <h2 class="text-2xl font-bold text-gray-700 dark:text-gray-400 underline">{{ weather_data.farmName }}</h2>
-          <p class="text-gray-600 dark:text-gray-400">Location: <span class="text-blue-800 font-bold dark:text-blue-500">{{ weather_data.location }}</span></p>
+          <h2
+            class="text-2xl font-bold text-gray-700 dark:text-gray-400 underline"
+          >
+            {{ weather_data.farmName }}
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400">
+            Location:
+            <span class="text-blue-800 font-bold dark:text-blue-500"
+              >{{ weather_data.location }}</span
+            >
+          </p>
         </div>
-        <h3 class="text-gray-700 text-3xl decoration:underline text-center dark:text-gray-400">Location Details:</h3>
+        <h3
+          class="text-gray-700 text-3xl decoration:underline text-center dark:text-gray-400"
+        >
+          Location Details:
+        </h3>
         <div class="block items-center justify-center ml-4 space-x-2">
-          <p class="text-gray-600 text-center dark:text-gray-400">Elevation (height above sea level): <span class="text-green-800 dark:text-greengreen-600 dark:text-green-600">{{ weather_data.weekly.elevation }} M(meters)</span></p>
-          <p class="text-gray-600 text-center dark:text-gray-400">Timezone: <span class="text-blue-800 font-bold underline dark:text-blue-500">{{ weather_data.weekly.timezone }} ({{ weather_data.weekly.timezone_abbreviation }})</span></p>
+          <p class="text-gray-600 text-center dark:text-gray-400">
+            Elevation (height above sea level):
+            <span
+              class="text-green-800 dark:text-greengreen-600 dark:text-green-600"
+              >{{ weather_data.weekly.elevation }} M(meters)</span
+            >
+          </p>
+          <p class="text-gray-600 text-center dark:text-gray-400">
+            Timezone:
+            <span class="text-blue-800 font-bold underline dark:text-blue-500"
+              >{{ weather_data.weekly.timezone }} ({{
+              weather_data.weekly.timezone_abbreviation }})</span
+            >
+          </p>
           <p class="flex underline"></p>
         </div>
 
         <!-- Daily Forecast 7 Days -->
-        <div id="dailyForecast-{{ weather_data.farmName|slugify }}" class="grid grid-cols-1 ml-2 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900">
+        <div
+          id="dailyForecast-{{ weather_data.farmName|slugify }}"
+          class="grid grid-cols-1 ml-2 md:grid-cols-2 lg:grid-cols-3 p-4 rounded-lg gap-2 dark:bg-gray-900"
+        >
           {% with weekly_data=weather_data.weekly.daily %}
-            {% for day in weekly_data.time %}
-                {% with index=forloop.counter0 %}
-                    {% with desc=weekly_data.weathercode|get_index:index|get_desc %}
-                        <div class="grid gap-6 ml-2 mb-4">
-                            <!-- Sample Day Forecast -->
-                            <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-                                <h2 class="text-xl font-bold mb-2 text-green-700">{{ day|get_day }}-{{ day }}</h2>
-                                <div class="flex items-center mb-2">
-                                    <img src="{% static 'images/' %}{{ desc|get_icon }}" alt="Weather Icon" class="w-16 h-16">
-                                    <p class="text-gray-600 ml-3 dark:text-gray-300">Condition: <span class="text-yellow-600 font-semibold">{{ desc }}</span></p>
-                                </div>
-                                <p class="text-gray-600 dark:text-gray-200">Max Temperature: <span class="text-red-600 dark:text-red-500">{{ weekly_data.temperature_2m_max|get_index:index }}°C</span></p>
-                                <p class="text-gray-600 dark:text-gray-200">Min Temperature: <span class="text-orange-700 dark:text-orange-500">{{ weekly_data.temperature_2m_min|get_index:index }}°C</span></p>
-                                {% if weekly_data.humidity %}
-                                    <p class="text-gray-600 dark:text-gray-200">Humidity: <span class="text-green-800 dark:text-green-400">{{ weekly_data.humidity }} %</span></p>
-                                {% else %}
-                                    <p class="text-gray-600 dark:text-gray-200">Humidity: <span class="text-red-800 dark:text-red-400">~~Unavailable~~</span></p>
-                                {% endif %}
-                                {% if weekly_data.wind_speed %}
-                                    <p class="text-gray-600 dark:text-gray-200">Wind Speed: <span class="text-green-800 dark:text-green-400">{{ weekly_data.wind_speed }} km/h</span></p>
-                                {% else %}
-                                    <p class="text-gray-600 dark:text-gray-200">Wind Speed: <span class="text-yellow-700 dark:text-yellow-500">~~📛~~</span></p>
-                                {% endif %}
-                                <p class="text-gray-600 dark:text-gray-200">Precipitation: <span class="text-green-800 dark:text-green-400">{{ weekly_data.precipitation_sum|get_index:index }} mm</span></p>
-                                <p class="text-gray-600 dark:text-gray-200">Sunrise: <span class="text-green-800 dark:text-green-400">{{ weekly_data.sunrise|get_index:index|normal_time }}</span></p>
-                                <p class="text-gray-600 dark:text-gray-200">Sunset: <span class="text-green-800 dark:text-green-400">{{ weekly_data.sunset|get_index:index|normal_time }}</span></p>
-                            </div>
-                        </div>
-                    {% endwith %}
-                {% endwith %}
-            {% endfor %}
+          {% for day in weekly_data.time %}
+          {% with index=forloop.counter0 %}
+          {% with desc=weekly_data.weathercode|get_index:index|get_desc %}
+          <div class="grid gap-6 ml-2 mb-4">
+            <!-- Sample Day Forecast -->
+            <div
+              class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950"
+            >
+              <h2 class="text-xl font-bold mb-2 text-green-700">
+                {{ day|get_day }}-{{ day }}
+              </h2>
+              <div class="flex items-center mb-2">
+                <img
+                  src="{% static 'images/' %}{{ desc|get_icon }}"
+                  alt="Weather Icon"
+                  class="w-16 h-16"
+                />
+                <p class="text-gray-600 ml-3 dark:text-gray-300">
+                  Condition:
+                  <span class="text-yellow-600 font-semibold">{{ desc }}</span>
+                </p>
+              </div>
+              <p class="text-gray-600 dark:text-gray-200">
+                Max Temperature:
+                <span class="text-red-600 dark:text-red-500"
+                  >{{ weekly_data.temperature_2m_max|get_index:index }}°C</span
+                >
+              </p>
+              <p class="text-gray-600 dark:text-gray-200">
+                Min Temperature:
+                <span class="text-orange-700 dark:text-orange-500"
+                  >{{ weekly_data.temperature_2m_min|get_index:index }}°C</span
+                >
+              </p>
+              {% if weekly_data.humidity %}
+              <p class="text-gray-600 dark:text-gray-200">
+                Humidity:
+                <span class="text-green-800 dark:text-green-400"
+                  >{{ weekly_data.humidity }} %</span
+                >
+              </p>
+              {% else %}
+              <p class="text-gray-600 dark:text-gray-200">
+                Humidity:
+                <span class="text-red-800 dark:text-red-400"
+                  >~~Unavailable~~</span
+                >
+              </p>
+              {% endif %} {% if weekly_data.wind_speed %}
+              <p class="text-gray-600 dark:text-gray-200">
+                Wind Speed:
+                <span class="text-green-800 dark:text-green-400"
+                  >{{ weekly_data.wind_speed }} km/h</span
+                >
+              </p>
+              {% else %}
+              <p class="text-gray-600 dark:text-gray-200">
+                Wind Speed:
+                <span class="text-yellow-700 dark:text-yellow-500">~~📛~~</span>
+              </p>
+              {% endif %}
+              <p class="text-gray-600 dark:text-gray-200">
+                Precipitation:
+                <span class="text-green-800 dark:text-green-400"
+                  >{{ weekly_data.precipitation_sum|get_index:index }} mm</span
+                >
+              </p>
+              <p class="text-gray-600 dark:text-gray-200">
+                Sunrise:
+                <span class="text-green-800 dark:text-green-400"
+                  >{{ weekly_data.sunrise|get_index:index|normal_time }}</span
+                >
+              </p>
+              <p class="text-gray-600 dark:text-gray-200">
+                Sunset:
+                <span class="text-green-800 dark:text-green-400"
+                  >{{ weekly_data.sunset|get_index:index|normal_time }}</span
+                >
+              </p>
+            </div>
+          </div>
           {% endwith %}
+          {% endwith %}
+          {% endfor %}
+          {% endwith %}
+        </div>
 
-
-     </div>
-
-      <!-- Hourly Forecast Section (Initially Hidden) -->
-        <div id="hourlyForecast-{{ weather_data.farmName|slugify }}" class="flex flex-cols items-center justify-center gap-6 hidden p-4 rounded-lg dark:bg-gray-900">
+        <!-- Hourly Forecast Section (Initially Hidden) -->
+        <div
+          id="hourlyForecast-{{ weather_data.farmName|slugify }}"
+          class="flex flex-cols items-center justify-center gap-6 hidden p-4 rounded-lg dark:bg-gray-900"
+        >
           {% with hourly3=weather_data %}
-              <!-- Daily 3 HOURS Forecast Section -->
-              <div class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950">
-                <h2 class="text-xl font-bold mb-2 text-green-700">For 3 HRS</h2>
-                <h2 class="text-gray-600">Country: <span class="text-green-700">{{ hourly3.country|default:"Value not found" }}</span></h2>
-                <img src="{% static 'images/*.png' %}" class="w-16 h-16" alt="Weather Icon">
-                <h2 class="text-gray-600">Location: <span class="text-blue-600">{{ hourly3.farmName }}</span></h2>
-                <div class="flex items-center mb-2">
-                <p class="text-gray-600 ml-0 font-bold">Condition: <span id="cond" class="text-yellow-600 font-semibold">{{ hourly3.weather_main }}</span></p>
-                  <p class="text-gray-600 ml-3">Description: <span class="text-yellow-600 font-semibold">{{ hourly3.weather_description }}</span></p>
-              </div>
-                <p class="text-gray-600">Temperature: <span class="text-red-600">{{ hourly3.temperature|floatformat:2 }}°C</span></p>
-                <p class="text-gray-600">Apparent Temperature: <span class="text-green-800">{{ hourly3.feels_like|floatformat:2 }}°C</span></p>
-                <p class="text-gray-600">Humidity: <span class="text-blue-600">{{ hourly3.humidity }}%</span></p>
-                <p class="text-gray-600">Wind Speed: <span class="text-blue-600">{{ hourly3.wind_speed }}m/s</span></p>
-                <p class="text-gray-600">Wind Direction: <span class="text-green-800">{{ hourly3.wind_direction }}°</span></p>
-                <p class="text-gray-600">Pressure:: <span class="text-blue-600">{{ hourly3.pressure }}hPa</span></p>
-                <p class="text-gray-600">Cloud Cover: <span class="text-blue-600">{{ hourly3.cloud_cover }}%</span></p>
-                <p class="text-gray-600">Sunrise: <span class="text-green-800">{{ hourly3.sunrise }}</span></p>
-                <p class="text-gray-600">Sunset: <span class="text-green-800">{{ hourly3.sunset }}</span></p>
-                <p class="text-gray-600">Rain Last Hour: <span class="text-blue-600">{{ hourly3.rain_last_hour }}mm</span></p>
-              </div>
-            {% endwith %}
+          <!-- Daily 3 HOURS Forecast Section -->
+          <div
+            class="bg-green-100 p-6 rounded-lg shadow-md transition duration-5 ease-in-out hover:scale-105 dark:bg-slate-950"
+          >
+            <h2 class="text-xl font-bold mb-2 text-green-700">For 3 HRS</h2>
+            <h2 class="text-gray-600">
+              Country:
+              <span class="text-green-700"
+                >{{ hourly3.country|default:"Value not found" }}</span
+              >
+            </h2>
+            <img
+              src="{% static 'images/*.png' %}"
+              class="w-16 h-16"
+              alt="Weather Icon"
+            />
+            <h2 class="text-gray-600">
+              Location:
+              <span class="text-blue-600">{{ hourly3.farmName }}</span>
+            </h2>
+            <div class="flex items-center mb-2">
+              <p class="text-gray-600 ml-0 font-bold">
+                Condition:
+                <span id="cond" class="text-yellow-600 font-semibold"
+                  >{{ hourly3.weather_main }}</span
+                >
+              </p>
+              <p class="text-gray-600 ml-3">
+                Description:
+                <span class="text-yellow-600 font-semibold"
+                  >{{ hourly3.weather_description }}</span
+                >
+              </p>
+            </div>
+            <p class="text-gray-600">
+              Temperature:
+              <span class="text-red-600"
+                >{{ hourly3.temperature|floatformat:2 }}°C</span
+              >
+            </p>
+            <p class="text-gray-600">
+              Apparent Temperature:
+              <span class="text-green-800"
+                >{{ hourly3.feels_like|floatformat:2 }}°C</span
+              >
+            </p>
+            <p class="text-gray-600">
+              Humidity:
+              <span class="text-blue-600">{{ hourly3.humidity }}%</span>
+            </p>
+            <p class="text-gray-600">
+              Wind Speed:
+              <span class="text-blue-600">{{ hourly3.wind_speed }}m/s</span>
+            </p>
+            <p class="text-gray-600">
+              Wind Direction:
+              <span class="text-green-800">{{ hourly3.wind_direction }}°</span>
+            </p>
+            <p class="text-gray-600">
+              Pressure::
+              <span class="text-blue-600">{{ hourly3.pressure }}hPa</span>
+            </p>
+            <p class="text-gray-600">
+              Cloud Cover:
+              <span class="text-blue-600">{{ hourly3.cloud_cover }}%</span>
+            </p>
+            <p class="text-gray-600">
+              Sunrise: <span class="text-green-800">{{ hourly3.sunrise }}</span>
+            </p>
+            <p class="text-gray-600">
+              Sunset: <span class="text-green-800">{{ hourly3.sunset }}</span>
+            </p>
+            <p class="text-gray-600">
+              Rain Last Hour:
+              <span class="text-blue-600">{{ hourly3.rain_last_hour }}mm</span>
+            </p>
+          </div>
+          {% endwith %}
         </div>
       </section>
-    {% endfor %}
-  </div>
-{% endblock %}
-  <script>
-    // JavaScript to toggle between forecast views
-    const dailyToggle = document.getElementById("dailyToggle");
-    const hourlyToggle = document.getElementById("hourlyToggle");
+      {% endfor %}
+    </div>
+    {% endblock %}
+    <script>
+      // JavaScript to toggle between forecast views
+      const dailyToggle = document.getElementById("dailyToggle");
+      const hourlyToggle = document.getElementById("hourlyToggle");
 
-    dailyToggle.addEventListener("click", () => {
-      document.querySelectorAll('[id^="dailyForecast-"]').forEach(dailyForecast => {
-        dailyForecast.classList.remove("hidden");
+      dailyToggle.addEventListener("click", () => {
+        document
+          .querySelectorAll('[id^="dailyForecast-"]')
+          .forEach((dailyForecast) => {
+            dailyForecast.classList.remove("hidden");
+          });
+        document
+          .querySelectorAll('[id^="hourlyForecast-"]')
+          .forEach((hourlyForecast) => {
+            hourlyForecast.classList.add("hidden");
+          });
       });
-      document.querySelectorAll('[id^="hourlyForecast-"]').forEach(hourlyForecast => {
-        hourlyForecast.classList.add("hidden");
+
+      hourlyToggle.addEventListener("click", () => {
+        document
+          .querySelectorAll('[id^="dailyForecast-"]')
+          .forEach((dailyForecast) => {
+            dailyForecast.classList.add("hidden");
+          });
+        document
+          .querySelectorAll('[id^="hourlyForecast-"]')
+          .forEach((hourlyForecast) => {
+            hourlyForecast.classList.remove("hidden");
+            console.log(hourlyForecast.className);
+          });
       });
-    });
 
-    hourlyToggle.addEventListener("click", () => {
-      document.querySelectorAll('[id^="dailyForecast-"]').forEach(dailyForecast => {
-        dailyForecast.classList.add("hidden");
-      });
-      document.querySelectorAll('[id^="hourlyForecast-"]').forEach(hourlyForecast => {
-        hourlyForecast.classList.remove("hidden");
-        console.log(hourlyForecast.className)
-      });
-    });
+      // Logic to highlight active button
+      // Get all buttons
+      const buttons = document.querySelectorAll("#button-container .btn");
 
+      buttons.forEach((button) => {
+        button.addEventListener("click", function () {
+          // Remove 'active' class from all buttons
+          buttons.forEach((btn) => btn.classList.remove("active"));
 
-
-    // Logic to highlight active button
-    // Get all buttons
-    const buttons = document.querySelectorAll("#button-container .btn");
-
-    buttons.forEach((button) => {
-        button.addEventListener('click', function() {
-            // Remove 'active' class from all buttons
-            buttons.forEach((btn) => btn.classList.remove('active'));
-
-            // Add 'active' class to the clicked button
-            this.classList.add('active');
+          // Add 'active' class to the clicked button
+          this.classList.add("active");
         });
-    });
-  </script>
+      });
+    </script>
 
     <!-- Footer -->
-    <footer class="fixed right-0 left-0 bottom-0 lg:relative xl:relative bg-green-800 text-white b-0 p-4 mt-8 md:mt-4 dark:bg-slate-900 dark:border-t-2 dark:border-gray-100">
-        <div class="container mx-auto text-center">
-            <p>&copy; 2024 Farm Weather Forecast | Designed for Farmers by Farmers</p>
-        </div>
+    <footer
+      class="fixed right-0 left-0 bottom-0 lg:relative xl:relative bg-green-800 text-white b-0 p-4 mt-8 md:mt-4 dark:bg-slate-900 dark:border-t-2 dark:border-gray-100"
+    >
+      <div class="container mx-auto text-center">
+        <p>
+          &copy; 2024 Farm Weather Forecast | Designed for Farmers by Farmers
+        </p>
+      </div>
     </footer>
-</body>
+  </body>
 </html>

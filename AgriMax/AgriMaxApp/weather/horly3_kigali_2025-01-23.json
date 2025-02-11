@@ -1,0 +1,45 @@
+{
+    "coord": {
+        "lon": 30.1297,
+        "lat": -1.886
+    },
+    "weather": [
+        {
+            "id": 802,
+            "main": "Clouds",
+            "description": "scattered clouds",
+            "icon": "03n"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 294.75,
+        "feels_like": 294.74,
+        "temp_min": 294.75,
+        "temp_max": 294.75,
+        "pressure": 1013,
+        "humidity": 68,
+        "sea_level": 1013,
+        "grnd_level": 847
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 2.57,
+        "deg": 20
+    },
+    "clouds": {
+        "all": 40
+    },
+    "dt": 1737653968,
+    "sys": {
+        "type": 1,
+        "id": 2594,
+        "country": "RW",
+        "sunrise": 1737605098,
+        "sunset": 1737649040
+    },
+    "timezone": 7200,
+    "id": 6413338,
+    "name": "Kigali",
+    "cod": 200
+}

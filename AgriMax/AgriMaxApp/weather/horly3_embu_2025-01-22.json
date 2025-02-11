@@ -1,0 +1,46 @@
+{
+    "coord": {
+        "lon": -46.8528,
+        "lat": -23.6495
+    },
+    "weather": [
+        {
+            "id": 804,
+            "main": "Clouds",
+            "description": "overcast clouds",
+            "icon": "04d"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 303.81,
+        "feels_like": 304.05,
+        "temp_min": 302.72,
+        "temp_max": 304.17,
+        "pressure": 1015,
+        "humidity": 43,
+        "sea_level": 1015,
+        "grnd_level": 922
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 3.2,
+        "deg": 274,
+        "gust": 3.88
+    },
+    "clouds": {
+        "all": 100
+    },
+    "dt": 1737555599,
+    "sys": {
+        "type": 1,
+        "id": 8446,
+        "country": "BR",
+        "sunrise": 1737535145,
+        "sunset": 1737583120
+    },
+    "timezone": -10800,
+    "id": 3464305,
+    "name": "Embu",
+    "cod": 200
+}

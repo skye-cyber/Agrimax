@@ -36,10 +36,10 @@ urlpatterns = [
     path('recommend/', views.recommend, name='recommend'),
     path('health/', views.healthEval, name="health"),
     path('farm&information/', views.FarminfoHandler, name="farminformation"),
-    path('getfarm/', views.getFarmPage, name="farmPage"),
+    path('getFarmPage/', views.getFarmPage, name="farmPage"),
 ]
 
 
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
